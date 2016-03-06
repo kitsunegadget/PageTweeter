@@ -1,4 +1,4 @@
-# Page Tweeter (Page Sharer)  
+# Page Tweeter
     
 ツイートボタンの無いページでもブラウザアクションボタンを押して、
 タイトルとURLを取得してツイートするページを表示させる Google Chrome 拡張機能です。  
