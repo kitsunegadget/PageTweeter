@@ -1,7 +1,7 @@
 {
 	"manifest_version": 2,
 	"name": "Page Tweeter",
-	"version": "0.5",
+	"version": "0.6",
 	"description": "ボタンを押すとページをツイートします。",
 	"icons": {
 		"24": "icons/ic_share_black_24dp_2x.png",
@@ -12,12 +12,13 @@
 			"18": "icons/ic_share_black_24dp_2x.png",
 			"36": "icons/ic_share_black_48dp_2x.png"
 		},
-		"default_title": "Click on Tweet THIS Page!!"
+		"default_title": "Click on Tweet THIS Page!!",
+        "default_popup": "popup.html"
 	},
 	"author": "hitakiyu",
 	"background": {
 		"scripts": ["bg.js"],
 		"persistent": false
 	},
-	"permissions": ["activeTab"]
+	"permissions": ["activeTab", "tabs"]
 }
