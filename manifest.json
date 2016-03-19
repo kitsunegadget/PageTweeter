@@ -7,18 +7,16 @@
 		"24": "icons/ic_share_black_24dp_2x.png",
 		"48": "icons/ic_share_black_48dp_2x.png"
 	},
-	"browser_action": {
-		"default_icon": {
-			"18": "icons/ic_share_black_24dp_2x.png",
-			"36": "icons/ic_share_black_48dp_2x.png"
-		},
-		"default_title": "Click on Tweet THIS Page!!",
-        "default_popup": "popup.html"
-	},
 	"author": "hitakiyu",
 	"background": {
 		"scripts": ["bg.js"],
 		"persistent": false
 	},
-	"permissions": ["activeTab", "tabs"]
+    "content_scripts": [
+        {
+            "matches": ["<all_urls>"],
+            "js": ["content.js"]
+        }
+    ],
+	"permissions": ["activeTab", "contextMenus"]
 }
