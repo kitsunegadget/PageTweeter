@@ -1,22 +1,22 @@
 {
-	"manifest_version": 2,
-	"name": "Page Tweeter",
-	"version": "0.6",
-	"description": "ボタンを押すとページをツイートします。",
-	"icons": {
-		"24": "icons/ic_share_black_24dp_2x.png",
-		"48": "icons/ic_share_black_48dp_2x.png"
-	},
-	"author": "hitakiyu",
-	"background": {
-		"scripts": ["bg.js"],
-		"persistent": false
-	},
+    "manifest_version": 2,
+    "name": "Page Tweeter",
+    "version": "0.7.5",
+    "description": "ボタンを押すとページをツイートします。",
+    "icons": {
+        "24": "icons/ic_share_black_24dp_2x.png",
+        "48": "icons/ic_share_black_48dp_2x.png"
+    },
+    "author": "hitakiyu",
+    "background": {
+        "scripts": ["bg.js"],
+        "persistent": false
+    },
     "content_scripts": [
         {
             "matches": ["<all_urls>"],
             "js": ["content.js"]
         }
     ],
-	"permissions": ["activeTab", "contextMenus"]
+    "permissions": ["activeTab", "contextMenus"]
 }

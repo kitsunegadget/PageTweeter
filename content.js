@@ -2,7 +2,20 @@ var windowOptions = "scrollbars=yes,resizable=yes,toolbar=no,location=yes",
     winHeight = screen.height,
     winWidth = screen.width;
 
-chrome.runtime.onMessage.addListener(function(mes, sender, sendResponse){
+chrome.runtime.onMessage.addListener(function(m, sender, sendResponse){
+    switch(m.area){
+        case "tweet":
+            tweet(m);
+            break;
+        case "copy":
+            copy(m);
+            break;
+        default:
+            console.log("Error...");
+    }
+});
+
+function tweet(m){
     console.log("PageTweeter: Create Tweet Window!");
     
     //表示位置設定
@@ -16,10 +29,22 @@ chrome.runtime.onMessage.addListener(function(mes, sender, sendResponse){
     }
     
     window.open(
-        "https://twitter.com/intent/tweet?text=" + mes.title + "&url=" + mes.url + "&related=yuzarkfox%3APageTweeter%20created%20by",
+        "https://twitter.com/intent/tweet?text=" + m.title + "&url=" + m.url + "&related=yuzarkfox%3APageTweeter%20created%20by",
         "intent",
         windowOptions + ",left=" + left + ",top=" + top + ",width=" + width + ",height=" + height
     );
+}
+
+function copy(m){
+    console.log("PageTweeter: Copy to ClipBoard!");
     
-    return true;
-});
+    //テキストエリアを埋め込んで選択範囲にして、コピーを実行（むりやり^^;）
+    var element = document.createElement('textarea');
+    element.innerText = m.title + " " + m.url;
+    document.body.appendChild(element);
+    
+    element.focus();
+    element.select();
+    document.execCommand('copy');
+    element.remove();
+}
