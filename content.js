@@ -43,7 +43,6 @@ function copy(m){
     element.innerText = m.title + " " + m.url;
     document.body.appendChild(element);
     
-    element.focus();
     element.select();
     document.execCommand('copy');
     element.remove();
