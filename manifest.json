@@ -1,11 +1,12 @@
 {
     "manifest_version": 2,
     "name": "Page Tweeter",
-    "version": "0.7.5",
-    "description": "ボタンを押すとページをツイートします。",
+    "version": "1.0",
+    "description": "右クリックからページをツイートできます。",
     "icons": {
-        "24": "icons/ic_share_black_24dp_2x.png",
-        "48": "icons/ic_share_black_48dp_2x.png"
+        "16": "PTicon.png",
+        "48": "PTicon.png",
+        "128": "PTicon.png"
     },
     "author": "hitakiyu",
     "background": {

@@ -1,7 +1,7 @@
 chrome.runtime.onInstalled.addListener(function(){
     chrome.contextMenus.create({
         id: "tweet_page", 
-        title: "このページをツイートする"
+        title: "このページをツイート"
     },
         function(){
         console.log("コンテキストメニュー(tweet_page)を登録したよ！");
@@ -26,25 +26,29 @@ chrome.runtime.onInstalled.addListener(function(){
 });
 
 chrome.contextMenus.onClicked.addListener(function(info,tab){
-    var url = encodeURIComponent(tab.url),
-        title = encodeURI(tab.title);
         
     switch(info.menuItemId){
         case "tweet_page":
             console.log("id:tweet_page の onClickイベント!");
             chrome.tabs.sendMessage(
                 tab.id,
-                { area: "tweet", url: url, title: title }
+                { area: "tweet", url: tab.url, title: tab.title },
+                function(response){
+                    if(response === undefined){ alert("このページでは利用できません。");} 
+                }
             ); 
             break;
         case "copy_clip":
             console.log("id:copy_clip の onClickイベント!");
             chrome.tabs.sendMessage(
                 tab.id,
-                { area: "copy", url: tab.url, title: tab.title }
+                { area: "copy", url: tab.url, title: tab.title },
+                function(response){
+                    if(response === undefined){ alert("このページでは利用できません。");} 
+                }
             ); 
             break;
         default:
-            console.log("Error! case no exist.");
+            console.log("Error! case is not exist.");
     }
 });

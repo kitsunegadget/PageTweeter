@@ -13,6 +13,7 @@ chrome.runtime.onMessage.addListener(function(m, sender, sendResponse){
         default:
             console.log("Error...");
     }
+    sendResponse("ok!");
 });
 
 function tweet(m){
@@ -28,8 +29,20 @@ function tweet(m){
         top = Math.round((winHeight / 2) - (height / 2));
     }
     
+    //文字数制限
+    var newtitle;
+    if(m.title.length > 75){
+        newtitle = m.title.substring(0, 73) + "...";
+    } else {
+        newtitle = m.title;
+    }
+    
+    //エンコード
+    var url = encodeURIComponent(m.url);
+        title = encodeURI(newtitle);
+        
     window.open(
-        "https://twitter.com/intent/tweet?text=" + m.title + "&url=" + m.url + "&related=yuzarkfox%3APageTweeter%20created%20by",
+        "https://twitter.com/intent/tweet?text=" + title + "&url=" + url + "&related=yuzarkfox%3APageTweeter%20created%20by",
         "intent",
         windowOptions + ",left=" + left + ",top=" + top + ",width=" + width + ",height=" + height
     );
@@ -38,11 +51,10 @@ function tweet(m){
 function copy(m){
     console.log("PageTweeter: Copy to ClipBoard!");
     
-    //テキストエリアを埋め込んで選択範囲にして、コピーを実行（むりやり^^;）
+    //テキストエリアを埋め込んで選択範囲にして、コピーを実行（むりやり？^^;）
     var element = document.createElement('textarea');
     element.innerText = m.title + " " + m.url;
     document.body.appendChild(element);
-    
     element.select();
     document.execCommand('copy');
     element.remove();
