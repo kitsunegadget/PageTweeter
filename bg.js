@@ -34,7 +34,7 @@ chrome.contextMenus.onClicked.addListener(function(info,tab){
                 tab.id,
                 { area: "tweet", url: tab.url, title: tab.title },
                 function(response){
-                    if(response === undefined){ alert("このページでは利用できません。");} 
+                    if(response === undefined){ alert("今は利用できません。");} 
                 }
             ); 
             break;
@@ -44,7 +44,7 @@ chrome.contextMenus.onClicked.addListener(function(info,tab){
                 tab.id,
                 { area: "copy", url: tab.url, title: tab.title },
                 function(response){
-                    if(response === undefined){ alert("このページでは利用できません。");} 
+                    if(response === undefined){ alert("今は利用できません。");} 
                 }
             ); 
             break;

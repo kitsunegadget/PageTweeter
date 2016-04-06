@@ -31,8 +31,8 @@ function tweet(m){
     
     //文字数制限
     var newtitle;
-    if(m.title.length > 75){
-        newtitle = m.title.substring(0, 73) + "...";
+    if(m.title.length + 48 > 140){
+        newtitle = m.title.substring(0, 140-48) + "...";
     } else {
         newtitle = m.title;
     }
