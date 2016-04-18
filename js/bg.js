@@ -23,6 +23,17 @@ chrome.runtime.onInstalled.addListener(function(){
         console.log("コンテキストメニュー(child)を登録したよ！");
     });
     */
+    
+    chrome.declarativeContent.onPageChanged.removeRules(undefined, function(){
+        chrome.declarativeContent.onPageChanged.addRules([{
+            conditions: [
+                new chrome.declarativeContent.PageStateMatcher({
+                    pageUrl: { schemes:  ["http","https"] }
+                })
+            ],
+            actions: [new chrome.declarativeContent.ShowPageAction() ]
+        }]);
+    })
 });
 
 chrome.contextMenus.onClicked.addListener(function(info,tab){
@@ -52,3 +63,8 @@ chrome.contextMenus.onClicked.addListener(function(info,tab){
             console.log("Error! case is not exist.");
     }
 });
+/*
+chrome.tabs.onUpdated.addListener(function(tabId){
+    chrome.pageAction.show(tabId);
+});
+*/

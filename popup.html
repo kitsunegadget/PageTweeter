@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>PageAction for PageTweeter</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background: #fff;
+        }
+        section{
+            width: 150px;
+        }
+        #list{
+            display: block;
+            list-style-type: none;
+        }
+        li a {
+            display: block;
+            margin: 0px;
+            padding: 0.2em;
+            border-bottom: 1px solid #ccc;
+            text-decoration: none;
+            line-height: 24px;
+            color: #000;
+        }
+        a:hover {
+            background: #0af;
+            color: #fff;
+        }
+    </style>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/popup.js"></script>
+</head>    
+<body>
+    <section>
+        <ul id="list">
+            <li><a href="#" id="tweet">このページをツイート</a></li>
+            <li><a href="#" id="copy">クリップボードにコピー</a></li>
+        </ul>
+    </section>
+</body>
+</html>

@@ -1,8 +1,8 @@
 {
     "manifest_version": 2,
     "name": "Page Tweeter",
-    "version": "1.1",
-    "description": "右クリックからページをツイートできます。",
+    "version": "2.0",
+    "description": "右クリックとアイコンからページをツイートできます。",
     "icons": {
         "16": "PTicon.png",
         "48": "PTicon.png",
@@ -10,14 +10,18 @@
     },
     "author": "hitakiyu",
     "background": {
-        "scripts": ["bg.js"],
+        "scripts": ["js/bg.js"],
         "persistent": false
+    },
+    "page_action": {
+        "default_title": "Page Tweeter",
+        "default_popup": "popup.html"
     },
     "content_scripts": [
         {
-            "matches": ["<all_urls>"],
-            "js": ["content.js"]
+            "matches": ["http://*/*", "https://*/*"],
+            "js": ["js/content.js"]
         }
     ],
-    "permissions": ["activeTab", "contextMenus"]
+    "permissions": ["activeTab", "contextMenus", "declarativeContent"]
 }
