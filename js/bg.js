@@ -45,7 +45,7 @@ chrome.contextMenus.onClicked.addListener(function(info,tab){
                 tab.id,
                 { area: "tweet", url: tab.url, title: tab.title },
                 function(response){
-                    if(response === undefined){ alert("今は利用できません。");} 
+                    if(response === undefined){ popupAlert(); } 
                 }
             ); 
             break;
@@ -55,7 +55,7 @@ chrome.contextMenus.onClicked.addListener(function(info,tab){
                 tab.id,
                 { area: "copy", url: tab.url, title: tab.title },
                 function(response){
-                    if(response === undefined){ alert("今は利用できません。");} 
+                    if(response === undefined){ popupAlert(); } 
                 }
             ); 
             break;
@@ -63,6 +63,10 @@ chrome.contextMenus.onClicked.addListener(function(info,tab){
             console.log("Error! case is not exist.");
     }
 });
+
+function popupAlert(){
+    alert("現在のページでは利用できません。");
+}
 /*
 chrome.tabs.onUpdated.addListener(function(tabId){
     chrome.pageAction.show(tabId);

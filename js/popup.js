@@ -5,13 +5,14 @@ window.onload = function(){
         tab = tabs[0];
         console.log(tab);
     }); //ここで読み込まないと他より先に読めない…
+    var bg = chrome.extension.getBackgroundPage();
     
     document.getElementById("tweet").onclick=function(){
         chrome.tabs.sendMessage(
             tab.id,
             { area: "tweet", url: tab.url, title: tab.title },
             function(response){
-                if(response === undefined){ alert("今は利用できません。");}
+                if(response === undefined){ bg.popupAlert(); }
             }
         );
         window.close();
@@ -22,7 +23,7 @@ window.onload = function(){
             tab.id,
             { area: "copy", url: tab.url, title: tab.title },
             function(response){
-                if(response === undefined){ alert("今は利用できません。");}
+                if(response === undefined){ bg.popupAlert();}
             }
         );
         window.close();
