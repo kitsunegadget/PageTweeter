@@ -42,7 +42,7 @@ function tweet(m){
         title = encodeURI(newtitle);
         
     window.open(
-        "https://twitter.com/intent/tweet?text=" + title + "&url=" + url + "&related=yuzarkfox%3APageTweeter%20created%20by",
+        "https://twitter.com/intent/tweet?text=" + title + "&url=" + url + "&related=yuztailsfox%3APageTweeter%20created%20by",
         "intent",
         windowOptions + ",left=" + left + ",top=" + top + ",width=" + width + ",height=" + height
     );
@@ -53,7 +53,13 @@ function copy(m){
     
     //テキストエリアを埋め込んで選択範囲にして、コピーを実行（むりやり？^^;）
     var element = document.createElement('textarea');
-    element.innerText = m.title + " " + m.url;
+    if (m.subArea === 0) {
+        element.innerText = m.title + " " + m.url;
+    } 
+    else if (m.subArea === 1) {
+        element.innerText = m.title;
+    }
+    
     document.body.appendChild(element);
     element.select();
     document.execCommand('copy');

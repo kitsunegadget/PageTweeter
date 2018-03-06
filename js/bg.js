@@ -13,17 +13,24 @@ chrome.runtime.onInstalled.addListener(function(){
         function(){
         console.log("コンテキストメニュー(copy_clip)を登録したよ！");
     });
-    /*
     chrome.contextMenus.create({
-        id: "child",
-        parentId: "tweet_page", 
-        title: "子要素"
+        id: "others",
+        title: "その他"
     },
         function(){
-        console.log("コンテキストメニュー(child)を登録したよ！");
+        console.log("コンテキストメニュー(others)を登録したよ！");
     });
-    */
+    //子要素
+    chrome.contextMenus.create({
+        id: "copy_title",
+        parentId: "others",
+        title: "ページタイトルのみをコピー"
+    },
+        function(){
+        console.log("コンテキストメニュー(copy_title)を登録したよ！");
+    });
     
+    //ページ制限
     chrome.declarativeContent.onPageChanged.removeRules(undefined, function(){
         chrome.declarativeContent.onPageChanged.addRules([{
             conditions: [
@@ -43,7 +50,7 @@ chrome.contextMenus.onClicked.addListener(function(info,tab){
             console.log("id:tweet_page の onClickイベント!");
             chrome.tabs.sendMessage(
                 tab.id,
-                { area: "tweet", url: tab.url, title: tab.title },
+                { area: "tweet", subArea: 0, url: tab.url, title: tab.title },
                 function(response){
                     if(response === undefined){ popupAlert(); } 
                 }
@@ -53,11 +60,21 @@ chrome.contextMenus.onClicked.addListener(function(info,tab){
             console.log("id:copy_clip の onClickイベント!");
             chrome.tabs.sendMessage(
                 tab.id,
-                { area: "copy", url: tab.url, title: tab.title },
+                { area: "copy", subArea: 0, url: tab.url, title: tab.title },
                 function(response){
                     if(response === undefined){ popupAlert(); } 
                 }
             ); 
+            break;
+        case "copy_title":
+            console.log("id:copy_title の onClickイベント!");
+            chrome.tabs.sendMessage(
+                tab.id,
+                { area: "copy", subArea: 1, url: tab.url, title: tab.title },
+                function(response){
+                    if(response === undefined){ popupAlert(); }
+                }
+            );
             break;
         default:
             console.log("Error! case is not exist.");

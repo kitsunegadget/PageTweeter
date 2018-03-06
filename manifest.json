@@ -1,14 +1,14 @@
 {
     "manifest_version": 2,
     "name": "Page Tweeter",
-    "version": "2.1",
+    "version": "2.2",
     "description": "右クリックとアイコンからページをツイートできます。",
     "icons": {
         "16": "PTicon.png",
         "48": "PTicon.png",
         "128": "PTicon.png"
     },
-    "author": "hitakiyu",
+    "author": "YuY",
     "background": {
         "scripts": ["js/bg.js"],
         "persistent": false
