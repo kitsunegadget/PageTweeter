@@ -1,23 +1,23 @@
-chrome.runtime.onInstalled.addListener(function(){
+chrome.runtime.onInstalled.addListener(() => {
     chrome.contextMenus.create({
         id: "tweet_page", 
         title: "このページをツイート"
     },
-        function(){
+        () => { 
         console.log("コンテキストメニュー(tweet_page)を登録したよ！");
     });
     chrome.contextMenus.create({
         id: "copy_clip", 
         title: "クリップボードにコピー"
     },
-        function(){
+        () => {
         console.log("コンテキストメニュー(copy_clip)を登録したよ！");
     });
     chrome.contextMenus.create({
         id: "others",
         title: "その他"
     },
-        function(){
+        () => {
         console.log("コンテキストメニュー(others)を登録したよ！");
     });
     //子要素
@@ -26,12 +26,12 @@ chrome.runtime.onInstalled.addListener(function(){
         parentId: "others",
         title: "ページタイトルのみをコピー"
     },
-        function(){
+        () => {
         console.log("コンテキストメニュー(copy_title)を登録したよ！");
     });
     
     //ページ制限
-    chrome.declarativeContent.onPageChanged.removeRules(undefined, function(){
+    chrome.declarativeContent.onPageChanged.removeRules(undefined, () => {
         chrome.declarativeContent.onPageChanged.addRules([{
             conditions: [
                 new chrome.declarativeContent.PageStateMatcher({
@@ -43,7 +43,7 @@ chrome.runtime.onInstalled.addListener(function(){
     })
 });
 
-chrome.contextMenus.onClicked.addListener(function(info,tab){
+chrome.contextMenus.onClicked.addListener((info,tab) => {
         
     switch(info.menuItemId){
         case "tweet_page":
@@ -51,7 +51,7 @@ chrome.contextMenus.onClicked.addListener(function(info,tab){
             chrome.tabs.sendMessage(
                 tab.id,
                 { area: "tweet", subArea: 0, url: tab.url, title: tab.title },
-                function(response){
+                (response) => {
                     if(response === undefined){ popupAlert(); } 
                 }
             ); 
@@ -61,7 +61,7 @@ chrome.contextMenus.onClicked.addListener(function(info,tab){
             chrome.tabs.sendMessage(
                 tab.id,
                 { area: "copy", subArea: 0, url: tab.url, title: tab.title },
-                function(response){
+                (response) => {
                     if(response === undefined){ popupAlert(); } 
                 }
             ); 
@@ -71,7 +71,7 @@ chrome.contextMenus.onClicked.addListener(function(info,tab){
             chrome.tabs.sendMessage(
                 tab.id,
                 { area: "copy", subArea: 1, url: tab.url, title: tab.title },
-                function(response){
+                (response) => {
                     if(response === undefined){ popupAlert(); }
                 }
             );
