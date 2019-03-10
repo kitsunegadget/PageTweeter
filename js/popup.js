@@ -1,31 +1,27 @@
+let bg = chrome.extension.getBackgroundPage();
+
 window.onload = function(){
-    
-    let tab;
-    chrome.tabs.query({active:true}, (tabs) => {
+    chrome.tabs.query({active: true, currentWindow:true}, (tabs) => {
         tab = tabs[0];
         console.log(tab);
+
+        document.getElementById("tweet").onclick=()=>{
+            sendMessage(tab, "tweet", 0);
+        };
+    
+        document.getElementById("copy").onclick=()=>{
+            sendMessage(tab, "copy", 0);
+        };
     }); //ここで読み込まないと他より先に読めない…
-    let bg = chrome.extension.getBackgroundPage();
-    
-    document.getElementById("tweet").onclick=()=>{
-        chrome.tabs.sendMessage(
-            tab.id,
-            { area: "tweet", subArea:0, url: tab.url, title: tab.title },
-            (response)=>{
-                if(response === undefined){ bg.popupAlert(); }
-            }
-        );
-        window.close();
-    };
-    
-    document.getElementById("copy").onclick=()=>{
-        chrome.tabs.sendMessage(
-            tab.id,
-            { area: "copy", subArea:0, url: tab.url, title: tab.title },
-            (response)=>{
-                if(response === undefined){ bg.popupAlert();}
-            }
-        );
-        window.close();
-    };
+};
+
+function sendMessage(tab, area, subArea){
+    chrome.tabs.sendMessage(
+        tab.id,
+        { area: area, subArea: subArea, url: tab.url, title: tab.title },
+        (response)=>{
+            if(response === undefined){ bg.popupAlert();}
+        }
+    );
+    //window.close();
 };
