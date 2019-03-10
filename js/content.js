@@ -39,7 +39,7 @@ function tweet(m){
     
     //エンコード
     let url = encodeURIComponent(m.url);
-        title = encodeURI(newtitle);
+        title = encodeURIComponent(newtitle);
         
     window.open(
         "https://twitter.com/intent/tweet?text=" + title + "&url=" + url + "&related=kitsunegadget%3APageTweeter%20created%20by",
