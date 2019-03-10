@@ -12,7 +12,11 @@ window.onload = function(){
         document.getElementById("copy").onclick=()=>{
             sendMessage(tab, "copy", 0);
         };
-    }); //ここで読み込まないと他より先に読めない…
+
+        document.getElementById("copy-title").onclick=()=>{
+            sendMessage(tab, "copy", 1);
+        };
+    });
 };
 
 function sendMessage(tab, area, subArea){
@@ -23,5 +27,5 @@ function sendMessage(tab, area, subArea){
             if(response === undefined){ bg.popupAlert();}
         }
     );
-    //window.close();
+    window.close();
 };

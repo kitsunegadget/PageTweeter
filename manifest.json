@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name": "Page Tweeter",
-    "version": "2.4",
+    "version": "2.5",
     "description": "右クリックとアイコンからページをツイートできます。",
     "icons": {
         "16": "PTicon.png",
