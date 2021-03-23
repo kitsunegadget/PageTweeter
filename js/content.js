@@ -21,7 +21,7 @@ function tweet(m){
     
     //表示位置設定
     let width = 550,
-        height = 420,
+        height = 570,
         left = Math.round((winWidth / 2) - (width / 2)),
         top = 0;
     
@@ -51,7 +51,7 @@ function tweet(m){
 function copy(m){
     console.log("PageTweeter: Copy to ClipBoard!");
     
-    //テキストエリアを埋め込んで選択範囲にして、コピーを実行（むりやり？^^;）
+    //テキストエリアを埋め込んで選択範囲にして、コピーを実行（むりやり？）
     let element = document.createElement('textarea');
     if (m.subArea === 0) {
         element.innerText = m.title + " " + m.url;

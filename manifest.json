@@ -1,5 +1,5 @@
 {
-    "manifest_version": 2,
+    "manifest_version": 3,
     "name": "Page Tweeter",
     "version": "2.5",
     "description": "右クリックとアイコンからページをツイートできます。",
@@ -10,10 +10,9 @@
     },
     "author": "YuY",
     "background": {
-        "scripts": ["js/bg.js"],
-        "persistent": false
+        "service_worker": "sw.js"
     },
-    "page_action": {
+    "action": {
         "default_title": "Page Tweeter",
         "default_popup": "popup.html"
     },
