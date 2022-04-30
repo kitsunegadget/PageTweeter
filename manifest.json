@@ -1,26 +1,28 @@
 {
-    "manifest_version": 3,
-    "name": "Page Tweeter",
-    "version": "2.5",
-    "description": "右クリックとアイコンからページをツイートできます。",
-    "icons": {
-        "16": "PTicon.png",
-        "48": "PTicon.png",
-        "128": "PTicon.png"
-    },
-    "author": "YuY",
-    "background": {
-        "service_worker": "sw.js"
-    },
-    "action": {
-        "default_title": "Page Tweeter",
-        "default_popup": "popup.html"
-    },
-    "content_scripts": [
-        {
-            "matches": ["http://*/*", "https://*/*"],
-            "js": ["js/content.js"]
-        }
-    ],
-    "permissions": ["activeTab", "contextMenus", "declarativeContent"]
+  "manifest_version": 3,
+  "name": "Page Tweeter",
+  "version": "3.0",
+  "description": "右クリックとアイコンからページをツイートできます。",
+  "icons": {
+    "16": "PTicon.png",
+    "48": "PTicon.png",
+    "128": "PTicon.png"
+  },
+  "author": "Yu, Kitsune Gadget",
+  "background": {
+    "service_worker": "sw.js",
+    "type": "module"
+  },
+  "action": {
+    "default_title": "Page Tweeter",
+    "default_popup": "popup/popup.html"
+  },
+  "permissions": [
+    "activeTab",
+    "contextMenus",
+    "declarativeContent",
+    "system.display",
+    "scripting",
+    "notifications"
+  ]
 }

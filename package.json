@@ -1,0 +1,18 @@
+{
+  "name": "paga-tweeter",
+  "version": "3.0",
+  "description": "You can tweet the URL you are viewing using RMB or Browser Action.",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Yu, kitsune Gadget",
+  "private": "true",
+  "bugs": {
+    "url": "https://github.com/kitsunegadget/PageTweeter/issues"
+  },
+  "homepage": "https://github.com/kitsunegadget/PageTweeter#readme",
+  "devDependencies": {
+    "@types/chrome": "^0.0.183",
+    "eslint": "^8.14.0"
+  }
+}
