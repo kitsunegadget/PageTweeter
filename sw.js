@@ -33,7 +33,7 @@ chrome.runtime.onInstalled.addListener(() => {
       console.log("コンテキストメニュー(others)を登録したよ！");
     }
   );
-  //子要素
+  // 子要素
   chrome.contextMenus.create(
     {
       id: "copy_title",
@@ -89,6 +89,6 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
         console.log("Error! case is not exist.");
     }
   } else {
-    popupAlert();
+    actions.notifyError(0);
   }
 });
