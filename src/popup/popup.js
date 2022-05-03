@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 "use strict";
-import { actions } from "../js/actions.js";
+import actions from "../js/actions.js";
 
 window.onload = async function () {
   const tabs = await chrome.tabs

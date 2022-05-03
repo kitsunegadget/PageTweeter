@@ -1,5 +1,5 @@
 "use strict";
-export const actions = {
+export default {
   get windowOptions() {
     return "scrollbars=yes,resizable=yes,toolbar=no,location=yes";
   },
@@ -148,7 +148,8 @@ export const actions = {
       chrome.notifications.create(id, {
         title: "PageTweeter",
         message: "Unavailable on this page.",
-        iconUrl: "./PTicon.png",
+        // eslint-disable-next-line no-undef
+        iconUrl: chrome.runtime.getURL("PTicon.png"),
         type: "basic",
       });
     }
