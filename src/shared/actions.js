@@ -1,16 +1,17 @@
 "use strict";
-export default {
+
+// importScript読み込み時に、グローバルスコープで扱えるようにする
+console.log("imported script!");
+self.pageTweeterActions = {
   get windowOptions() {
     return "scrollbars=yes,resizable=yes,toolbar=no,location=yes";
   },
 
   get screenHeight() {
     const screenWrap = async () => {
-      // eslint-disable-next-line no-prototype-builtins
       if (self.hasOwnProperty("screen")) {
         return screen.height;
       } else {
-        // eslint-disable-next-line no-undef
         const displayInfo = await chrome.system.display.getInfo();
         if (displayInfo) return displayInfo[0].bounds.height;
 
@@ -23,11 +24,9 @@ export default {
 
   get screenWidth() {
     const screenWrap = async () => {
-      // eslint-disable-next-line no-prototype-builtins
       if (self.hasOwnProperty("screen")) {
         return screen.width;
       } else {
-        // eslint-disable-next-line no-undef
         const displayInfo = await chrome.system.display.getInfo();
         if (displayInfo) return displayInfo[0].bounds.width;
 
@@ -77,7 +76,6 @@ export default {
     const url = encodeURIComponent(tab.url);
     const title = encodeURIComponent(shortenTitle);
 
-    // eslint-disable-next-line no-undef
     chrome.windows.create({
       url: `https://twitter.com/intent/tweet?text=${title}&url=${url}&related=kitsunegadget%3APageTweeter%20created%20by`,
       width: width,
@@ -117,11 +115,9 @@ export default {
    */
   async writeClipBoard(tabId, text) {
     try {
-      // eslint-disable-next-line no-prototype-builtins
       if (navigator.clipboard) {
         await navigator.clipboard.writeText(text);
       } else {
-        // eslint-disable-next-line no-undef
         await chrome.scripting.executeScript({
           target: { tabId: tabId },
           args: [{ text: text }],
@@ -144,19 +140,16 @@ export default {
     const id = `PageTweeter${10000 * Math.random().toFixed(4)}`;
     console.log(id);
     if (type === 0) {
-      // eslint-disable-next-line no-undef
       chrome.notifications.create(id, {
         title: "PageTweeter",
         message: "Unavailable on this page.",
-        // eslint-disable-next-line no-undef
         iconUrl: chrome.runtime.getURL("PTicon.png"),
         type: "basic",
       });
     }
 
     setTimeout(() => {
-      // eslint-disable-next-line no-undef
       chrome.notifications.clear(id);
-    }, 10000);
+    }, 8000);
   },
 };

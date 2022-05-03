@@ -1,6 +1,6 @@
-/* eslint-disable no-undef */
 "use strict";
-import actions from "./js/actions.js";
+
+import "./shared/actions";
 
 //
 // onInstalled event
@@ -71,17 +71,17 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
     console.log(tab);
     switch (info.menuItemId) {
       case "tweet_page":
-        actions.createTweetWindow(tab);
+        pageTweeterActions.createTweetWindow(tab);
         console.log("id:tweet_page の onClickイベント!");
 
         break;
       case "copy_clip":
-        actions.copy(tab);
+        pageTweeterActions.copy(tab);
         console.log("id:copy_clip の onClickイベント!");
 
         break;
       case "copy_title":
-        actions.copy(tab, true);
+        pageTweeterActions.copy(tab, true);
         console.log("id:copy_title の onClickイベント!");
 
         break;
@@ -89,6 +89,6 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
         console.log("Error! case is not exist.");
     }
   } else {
-    actions.notifyError(0);
+    pageTweeterActions.notifyError(0);
   }
 });
