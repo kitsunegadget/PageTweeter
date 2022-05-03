@@ -1,6 +1,6 @@
-/* eslint-disable no-undef */
 "use strict";
-import actions from "../js/actions.js";
+
+import "../shared/actions";
 
 window.onload = async function () {
   const tabs = await chrome.tabs
@@ -13,22 +13,22 @@ window.onload = async function () {
       bgWindow.popupAlert();
       throw err;
     });
-
+    
   const tab = tabs[0];
   console.log(tab);
 
   document.getElementById("tweet").onclick = () => {
-    actions.createTweetWindow(tab);
+    pageTweeterActions.createTweetWindow(tab);
     window.close();
   };
 
   document.getElementById("copy").onclick = () => {
-    actions.copy(tab);
+    pageTweeterActions.copy(tab);
     window.close();
   };
 
   document.getElementById("copy-title").onclick = () => {
-    actions.copy(tab, true);
+    pageTweeterActions.copy(tab, true);
     window.close();
   };
 };
