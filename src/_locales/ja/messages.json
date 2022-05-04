@@ -1,0 +1,20 @@
+{
+  "extension_description": {
+    "message": "右クリックとアイコンからページをツイートできます。"
+  },
+  "tweet_page_text": {
+    "message": "このページをツイート"
+  },
+  "clipboard_text": {
+    "message": "タイトルとリンクのコピー"
+  },
+  "context_others": {
+    "message": "その他"
+  },
+  "clipboard_title_only_text": {
+    "message": "タイトルのみコピー"
+  },
+  "error_text_0": {
+    "message": "このページでは利用できません"
+  }
+}

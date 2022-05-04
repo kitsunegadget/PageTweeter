@@ -1,0 +1,20 @@
+{
+  "extension_description": {
+    "message": "You can tweet the URL you are viewing using RMB or Browser Action."
+  },
+  "tweet_page_text": {
+    "message": "Tweet this page"
+  },
+  "clipboard_text": {
+    "message": "Copy title and Link"
+  },
+  "context_others": {
+    "message": "Others"
+  },
+  "clipboard_title_only_text": {
+    "message": "Copy title only"
+  },
+  "error_text_0": {
+    "message": "Unavailable on this page"
+  }
+}

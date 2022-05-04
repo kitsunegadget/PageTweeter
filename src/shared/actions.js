@@ -143,8 +143,8 @@ self.pageTweeterActions = {
 
     if (type === 0) {
       chrome.notifications.create(id, {
-        title: "PageTweeter",
-        message: "Unavailable on this page.",
+        title: "Page Tweeter",
+        message: chrome.i18n.getMessage("error_text_0"),
         iconUrl: chrome.runtime.getURL("PTicon.png"),
         type: "basic",
       });
