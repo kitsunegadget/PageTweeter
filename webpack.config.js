@@ -50,6 +50,7 @@ const config = {
         { from: "./src/manifest.json", to: "" },
         { from: "./src/PTicon.png", to: "" },
         { from: "./src/popup/popup.html", to: "popup" },
+        { from: "./src/_locales", to: "_locales" }
       ],
     }),
     new BundleAnalyzerPlugin(),

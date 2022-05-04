@@ -9,28 +9,28 @@ chrome.runtime.onInstalled.addListener(() => {
   chrome.contextMenus.create(
     {
       id: "tweet_page",
-      title: "このページをツイート",
+      title: chrome.i18n.getMessage("tweet_page_text"),
     },
     () => {
-      if (dev) console.log("コンテキストメニュー(tweet_page)を登録したよ！");
+      if (dev) console.log("コンテキストメニュー(tweet_page)を登録したよ！"); // dev log
     }
   );
   chrome.contextMenus.create(
     {
       id: "copy_clip",
-      title: "クリップボードにコピー",
+      title: chrome.i18n.getMessage("clipboard_text"),
     },
     () => {
-      if (dev) console.log("コンテキストメニュー(copy_clip)を登録したよ！");
+      if (dev) console.log("コンテキストメニュー(copy_clip)を登録したよ！"); // dev log
     }
   );
   chrome.contextMenus.create(
     {
       id: "others",
-      title: "その他",
+      title: chrome.i18n.getMessage("context_others"),
     },
     () => {
-      if (dev) console.log("コンテキストメニュー(others)を登録したよ！");
+      if (dev) console.log("コンテキストメニュー(others)を登録したよ！"); // dev log
     }
   );
   // 子要素
@@ -38,10 +38,10 @@ chrome.runtime.onInstalled.addListener(() => {
     {
       id: "copy_title",
       parentId: "others",
-      title: "ページタイトルのみをコピー",
+      title: chrome.i18n.getMessage("clipboard_title_only_text"),
     },
     () => {
-      if (dev) console.log("コンテキストメニュー(copy_title)を登録したよ！");
+      if (dev) console.log("コンテキストメニュー(copy_title)を登録したよ！"); // dev log
     }
   );
 
@@ -71,21 +71,21 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
     switch (info.menuItemId) {
       case "tweet_page":
         pageTweeterActions.createTweetWindow(tab);
-        if (dev) console.log("id:tweet_page の onClickイベント!");
+        if (dev) console.log("id:tweet_page の onClickイベント!"); // dev log
 
         break;
       case "copy_clip":
         pageTweeterActions.copy(tab);
-        if (dev) console.log("id:copy_clip の onClickイベント!");
+        if (dev) console.log("id:copy_clip の onClickイベント!"); // dev log
 
         break;
       case "copy_title":
         pageTweeterActions.copy(tab, true);
-        if (dev) console.log("id:copy_title の onClickイベント!");
+        if (dev) console.log("id:copy_title の onClickイベント!"); // dev log
 
         break;
       default:
-        if (dev) console.log("Error! case is not exist.");
+        if (dev) console.log("Error! case is not exist."); // dev log
     }
   } else {
     pageTweeterActions.notifyError(0);
