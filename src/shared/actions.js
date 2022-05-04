@@ -1,14 +1,15 @@
-"use strict";
+const dev = process.env.NODE_ENV === "development";
 
 // importScript読み込み時に、グローバルスコープで扱えるようにする
-console.log("imported script!");
+if (dev) console.log("imported script!"); // dev log
+
 self.pageTweeterActions = {
   get windowOptions() {
     return "scrollbars=yes,resizable=yes,toolbar=no,location=yes";
   },
 
   get screenHeight() {
-    const screenWrap = async () => {
+    const wrap = async () => {
       if (self.hasOwnProperty("screen")) {
         return screen.height;
       } else {
@@ -19,11 +20,11 @@ self.pageTweeterActions = {
       }
     };
 
-    return screenWrap();
+    return wrap();
   },
 
   get screenWidth() {
-    const screenWrap = async () => {
+    const wrap = async () => {
       if (self.hasOwnProperty("screen")) {
         return screen.width;
       } else {
@@ -34,7 +35,7 @@ self.pageTweeterActions = {
       }
     };
 
-    return screenWrap();
+    return wrap();
   },
 
   checkUrlScheme(tab) {
@@ -62,7 +63,7 @@ self.pageTweeterActions = {
       top = Math.round((await this.screenHeight) / 2 - height / 2);
     }
 
-    console.log(await this.screenWidth, await this.screenHeight);
+    if (dev) console.log(await this.screenWidth, await this.screenHeight); // dev log
 
     // 文字数制限
     let shortenTitle = "";
@@ -85,7 +86,7 @@ self.pageTweeterActions = {
       type: "popup",
     });
 
-    console.log("PageTweeter: Create Tweet Window!");
+    if (dev) console.log("PageTweeter: Create Tweet Window!"); // dev log
   },
 
   /**
@@ -101,10 +102,10 @@ self.pageTweeterActions = {
 
     if (onlyTitle) {
       this.writeClipBoard(tab.id, tab.title);
-      console.log("PageTweeter: Copy to ClipBoard! only Title.");
+      if (dev) console.log("PageTweeter: Copy to ClipBoard! only Title."); // dev log
     } else {
       this.writeClipBoard(tab.id, `${tab.title} ${tab.url}`);
-      console.log("PageTweeter: Copy to ClipBoard!");
+      if (dev) console.log("PageTweeter: Copy to ClipBoard!"); // dev log
     }
   },
 
@@ -136,9 +137,10 @@ self.pageTweeterActions = {
    * Notify unavailable message.
    * @param {number} type
    */
-  notifyError(type) {
-    const id = `PageTweeter${10000 * Math.random().toFixed(4)}`;
-    console.log(id);
+  async notifyError(type) {
+    const id = `PageTweeter${(1000 + Math.random() * 8999).toFixed()}`;
+    if (dev) console.log(id); // dev log
+
     if (type === 0) {
       chrome.notifications.create(id, {
         title: "PageTweeter",
@@ -148,8 +150,21 @@ self.pageTweeterActions = {
       });
     }
 
-    setTimeout(() => {
-      chrome.notifications.clear(id);
-    }, 8000);
+    // popupではクリック後に閉じるため処理できないので、サービスワーカーに
+    // メッセージングして譲る
+    if (self.toString() === "[object Window]") {
+      try {
+        await chrome.runtime.sendMessage({
+          type: "clearNotify",
+          id: id,
+        });
+      } catch (err) {
+        console.error(err);
+      }
+    } else {
+      setTimeout(() => {
+        chrome.notifications.clear(id);
+      }, 6500);
+    }
   },
 };
