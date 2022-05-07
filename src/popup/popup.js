@@ -2,9 +2,24 @@ import "../shared/actions";
 
 const dev = process.env.NODE_ENV === "development";
 
-window.onload = async function () {
+window.onload = function () {
   applyLocaleText();
+  applyActinonEvent();
+};
 
+function applyLocaleText() {
+  document.querySelector("#tweet span").innerText =
+    chrome.i18n.getMessage("tweet_page_text");
+
+  document.querySelector("#copy span").innerText =
+    chrome.i18n.getMessage("clipboard_text");
+
+  document.querySelector("#copy-title span").innerText = chrome.i18n.getMessage(
+    "clipboard_title_only_text"
+  );
+}
+
+async function applyActinonEvent() {
   const tabs = await chrome.tabs
     .query({
       active: true,
@@ -31,16 +46,4 @@ window.onload = async function () {
     pageTweeterActions.copy(tab, true);
     if (!dev) window.close();
   };
-};
-
-function applyLocaleText() {
-  document.getElementById("tweet").innerText =
-    chrome.i18n.getMessage("tweet_page_text");
-
-  document.getElementById("copy").innerText =
-    chrome.i18n.getMessage("clipboard_text");
-
-  document.getElementById("copy-title").innerText = chrome.i18n.getMessage(
-    "clipboard_title_only_text"
-  );
 }
