@@ -47,6 +47,8 @@ chrome.runtime.onInstalled.addListener(() => {
 
   // declartiveContent
   chrome.declarativeContent.onPageChanged.removeRules(undefined, () => {
+    chrome.action.disable();
+    
     const rule = {
       conditions: [
         new chrome.declarativeContent.PageStateMatcher({
