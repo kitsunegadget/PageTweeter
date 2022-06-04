@@ -36,6 +36,16 @@ chrome.runtime.onInstalled.addListener(() => {
   // 子要素
   chrome.contextMenus.create(
     {
+      id: "copy_mdformat",
+      parentId: "others",
+      title: chrome.i18n.getMessage("clipboard_mdformat_text"),
+    },
+    () => {
+      if (dev) console.log("コンテキストメニュー(copy_mdstyle)を登録したよ！"); // dev log
+    }
+  );
+  chrome.contextMenus.create(
+    {
       id: "copy_title",
       parentId: "others",
       title: chrome.i18n.getMessage("clipboard_title_only_text"),
@@ -48,7 +58,7 @@ chrome.runtime.onInstalled.addListener(() => {
   // declartiveContent
   chrome.declarativeContent.onPageChanged.removeRules(undefined, () => {
     chrome.action.disable();
-    
+
     const rule = {
       conditions: [
         new chrome.declarativeContent.PageStateMatcher({
@@ -81,8 +91,13 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
         if (dev) console.log("id:copy_clip の onClickイベント!"); // dev log
 
         break;
+      case "copy_mdformat":
+        pageTweeterActions.copy(tab, "md_format");
+        if (dev) console.log("id:copy_title の onClickイベント!"); // dev log
+
+        break;
       case "copy_title":
-        pageTweeterActions.copy(tab, true);
+        pageTweeterActions.copy(tab, "only_title");
         if (dev) console.log("id:copy_title の onClickイベント!"); // dev log
 
         break;

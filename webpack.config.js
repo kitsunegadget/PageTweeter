@@ -21,7 +21,7 @@ const config = {
     // splitchunks をするとactionsが通常ロードされないために動いてくれなくなるので、
     // あえてそのままに。
     // 後読みできるDynamic ImportやImport Scriptであればpopupは動くのだが、
-    // SW内部で動いてくれない
+    // SW内部ではimportの依存関係が即時ロードできずに動いてくれない
   },
   output: {
     filename: "[name].js",
@@ -51,7 +51,7 @@ const config = {
         { from: "./src/PTicon.png", to: "" },
         { from: "./src/popup/popup.html", to: "popup" },
         { from: "./src/popup/images", to: "popup/images" },
-        { from: "./src/_locales", to: "_locales" }
+        { from: "./src/_locales", to: "_locales" },
       ],
     }),
     new BundleAnalyzerPlugin(),
