@@ -21,7 +21,7 @@ const config = {
     // splitchunks をするとactionsが通常ロードされないために動いてくれなくなるので、
     // あえてそのままに。
     // 後読みできるDynamic ImportやImport Scriptであればpopupは動くのだが、
-    // SW内部ではimportの依存関係が即時ロードできずに動いてくれない
+    // SW内部では分割してしまうとimportの依存関係が即時ロードできずに動いてくれない
   },
   output: {
     filename: "[name].js",

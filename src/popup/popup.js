@@ -1,7 +1,11 @@
-import "../shared/actions";
-import { _debugLog_ } from "../shared/debug-log";
+import { Actions } from "../shared/actions";
+import { _debugLog_ } from "../shared/debug";
 
 const dev = process.env.NODE_ENV === "development";
+
+function windowClose() {
+  if (!dev) window.close();
+}
 
 window.onload = function () {
   applyLocaleText();
@@ -33,23 +37,25 @@ async function applyActinonEvent() {
   const tab = tabs[0];
   _debugLog_?.(tab);
 
-  document.getElementById("tweet").onclick = () => {
-    pageTweeterActions.createTweetWindow(tab);
-    if (!dev) window.close();
+  document.getElementById("tweet").onclick = async () => {
+    Actions.createTweetWindow(tab);
+    windowClose();
   };
 
-  document.getElementById("copy").onclick = () => {
-    pageTweeterActions.copy(tab);
-    if (!dev) window.close();
+  // popup -> background での executeScript が上手くいかないため
+  // Actions を両方に含めることに
+  document.getElementById("copy").onclick = async () => {
+    Actions.copy(tab);
+    windowClose();
   };
 
-  document.getElementById("copy-mdformat").onclick = () => {
-    pageTweeterActions.copy(tab, "md_format");
-    if (!dev) window.close();
+  document.getElementById("copy-md-format").onclick = async () => {
+    Actions.copy(tab, "copy_md_format");
+    windowClose();
   };
 
-  document.getElementById("copy-title").onclick = () => {
-    pageTweeterActions.copy(tab, "only_title");
-    if (!dev) window.close();
+  document.getElementById("copy-title").onclick = async () => {
+    Actions.copy(tab, "copy_only_title");
+    windowClose();
   };
 }
