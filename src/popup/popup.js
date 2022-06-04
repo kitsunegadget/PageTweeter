@@ -1,4 +1,5 @@
 import "../shared/actions";
+import { _debugLog_ } from "../shared/debug-log";
 
 const dev = process.env.NODE_ENV === "development";
 
@@ -30,7 +31,7 @@ async function applyActinonEvent() {
     });
 
   const tab = tabs[0];
-  if (dev) console.log(tab); // dev log
+  _debugLog_?.(tab);
 
   document.getElementById("tweet").onclick = () => {
     pageTweeterActions.createTweetWindow(tab);
@@ -42,8 +43,13 @@ async function applyActinonEvent() {
     if (!dev) window.close();
   };
 
+  document.getElementById("copy-mdformat").onclick = () => {
+    pageTweeterActions.copy(tab, "md_format");
+    if (!dev) window.close();
+  };
+
   document.getElementById("copy-title").onclick = () => {
-    pageTweeterActions.copy(tab, true);
+    pageTweeterActions.copy(tab, "only_title");
     if (!dev) window.close();
   };
 }

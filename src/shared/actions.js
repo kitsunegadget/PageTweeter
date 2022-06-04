@@ -1,7 +1,7 @@
-const dev = process.env.NODE_ENV === "development";
+import { _debugLog_ } from "./debug-log";
 
 // importScript読み込み時に、グローバルスコープで扱えるようにする
-if (dev) console.log("imported script!"); // dev log
+_debugLog_?.("imported script!"); // dev log
 
 self.pageTweeterActions = {
   get windowOptions() {
@@ -63,7 +63,7 @@ self.pageTweeterActions = {
       top = Math.round((await this.screenHeight) / 2 - height / 2);
     }
 
-    if (dev) console.log(await this.screenWidth, await this.screenHeight); // dev log
+    _debugLog_?.(await this.screenWidth, await this.screenHeight); // dev log
 
     // 文字数制限
     let shortenTitle = "";
@@ -86,27 +86,50 @@ self.pageTweeterActions = {
       type: "popup",
     });
 
-    if (dev) console.log("PageTweeter: Create Tweet Window!"); // dev log
+    _debugLog_?.("PageTweeter: Create Tweet Window!");
   },
 
   /**
    * Copy to string.
    * @param {chrome.tabs.Tab} tab
-   * @param {boolean} onlyTitle
+   * @param {string} copyType
    */
-  async copy(tab, onlyTitle = false) {
+  async copy(tab, copyType = "default") {
     if (!this.checkUrlScheme(tab)) {
       this.notifyError(0);
       return;
     }
 
-    if (onlyTitle) {
-      this.writeClipBoard(tab.id, tab.title);
-      if (dev) console.log("PageTweeter: Copy to ClipBoard! only Title."); // dev log
-    } else {
-      this.writeClipBoard(tab.id, `${tab.title} ${tab.url}`);
-      if (dev) console.log("PageTweeter: Copy to ClipBoard!"); // dev log
+    switch (copyType) {
+      case "default": {
+        this.writeClipBoard(tab.id, `${tab.title} ${tab.url}`);
+        _debugLog_?.("PageTweeter: Copy to ClipBoard!");
+
+        break;
+      }
+      case "md_format":
+        this.writeClipBoard(tab.id, `[${tab.title}](${tab.url})`);
+        _debugLog_?.("PageTweeter: Copy to ClipBoard! MarkDown style.");
+
+        break;
+      case "only_title":
+        this.writeClipBoard(tab.id, tab.title);
+        _debugLog_?.("PageTweeter: Copy to ClipBoard! only Title.");
+
+        break;
+      default:
     }
+
+    // if (copyType === "default") {
+    //   this.writeClipBoard(tab.id, `${tab.title} ${tab.url}`);
+    //   _debugLog_?.("PageTweeter: Copy to ClipBoard!");
+    // } else if (copyType === "md_style") {
+    //   this.writeClipBoard(tab.id, `[${tab.title}](${tab.url})`);
+    //   _debugLog_?.("PageTweeter: Copy to ClipBoard! MarkDown style.");
+    // } else if (copyType === "only_title") {
+    //   this.writeClipBoard(tab.id, tab.title);
+    //   _debugLog_?.("PageTweeter: Copy to ClipBoard! only Title.");
+    // }
   },
 
   /**
@@ -159,7 +182,7 @@ self.pageTweeterActions = {
           id: id,
         });
       } catch (err) {
-        console.error(err);
+        throw new Error(err);
       }
     } else {
       setTimeout(() => {

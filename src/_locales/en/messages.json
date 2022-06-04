@@ -11,6 +11,9 @@
   "context_others": {
     "message": "Others"
   },
+  "clipboard_mdformat_text": {
+    "message": "Copy in Markdown format"
+  },
   "clipboard_title_only_text": {
     "message": "Copy title only"
   },
