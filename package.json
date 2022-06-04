@@ -1,6 +1,6 @@
 {
   "name": "page-tweeter",
-  "version": "4.3",
+  "version": "4.5",
   "description": "You can tweet the URL you are viewing using RMB or Browser Action.",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

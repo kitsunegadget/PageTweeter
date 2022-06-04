@@ -1,9 +1,6 @@
-import { _debugLog_ } from "./debug-log";
+import { _debugLog_ } from "./debug";
 
-// importScript読み込み時に、グローバルスコープで扱えるようにする
-_debugLog_?.("imported script!"); // dev log
-
-self.pageTweeterActions = {
+export const Actions = {
   get windowOptions() {
     return "scrollbars=yes,resizable=yes,toolbar=no,location=yes";
   },
@@ -39,8 +36,8 @@ self.pageTweeterActions = {
   },
 
   checkUrlScheme(tab) {
-    // 共有すると危ういURLはバイパスさせる
-    return /^http(s|):\/\/.*\/.*/g.test(tab.url);
+    // 共有すると危ういスキームはバイパスさせる
+    return /^http(s|):\/\/.+?\/.*/g.test(tab.url);
   },
 
   /**
@@ -63,7 +60,7 @@ self.pageTweeterActions = {
       top = Math.round((await this.screenHeight) / 2 - height / 2);
     }
 
-    _debugLog_?.(await this.screenWidth, await this.screenHeight); // dev log
+    _debugLog_?.(await this.screenWidth, await this.screenHeight);
 
     // 文字数制限
     let shortenTitle = "";
@@ -107,29 +104,19 @@ self.pageTweeterActions = {
 
         break;
       }
-      case "md_format":
+      case "copy_md_format":
         this.writeClipBoard(tab.id, `[${tab.title}](${tab.url})`);
         _debugLog_?.("PageTweeter: Copy to ClipBoard! MarkDown style.");
 
         break;
-      case "only_title":
+      case "copy_only_title":
         this.writeClipBoard(tab.id, tab.title);
         _debugLog_?.("PageTweeter: Copy to ClipBoard! only Title.");
 
         break;
       default:
+        throw new Error("Error! case is not exist.");
     }
-
-    // if (copyType === "default") {
-    //   this.writeClipBoard(tab.id, `${tab.title} ${tab.url}`);
-    //   _debugLog_?.("PageTweeter: Copy to ClipBoard!");
-    // } else if (copyType === "md_style") {
-    //   this.writeClipBoard(tab.id, `[${tab.title}](${tab.url})`);
-    //   _debugLog_?.("PageTweeter: Copy to ClipBoard! MarkDown style.");
-    // } else if (copyType === "only_title") {
-    //   this.writeClipBoard(tab.id, tab.title);
-    //   _debugLog_?.("PageTweeter: Copy to ClipBoard! only Title.");
-    // }
   },
 
   /**
@@ -162,7 +149,7 @@ self.pageTweeterActions = {
    */
   async notifyError(type) {
     const id = `PageTweeter${(1000 + Math.random() * 8999).toFixed()}`;
-    if (dev) console.log(id); // dev log
+    _debugLog_?.(id);
 
     if (type === 0) {
       chrome.notifications.create(id, {
