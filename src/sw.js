@@ -63,32 +63,44 @@ chrome.runtime.onInstalled.addListener(() => {
   });
 });
 
-//
-// contextMenu onClick Listener
-//
+//////////////////////////////////
+// contextMenu onClick Listener //
+//////////////////////////////////
 chrome.contextMenus.onClicked.addListener((info, tab) => {
   if (tab) {
-    console.log(tab);
     switch (info.menuItemId) {
       case "tweet_page":
         pageTweeterActions.createTweetWindow(tab);
-        console.log("id:tweet_page の onClickイベント!");
+        if (dev) console.log("id:tweet_page の onClickイベント!");
 
         break;
       case "copy_clip":
         pageTweeterActions.copy(tab);
-        console.log("id:copy_clip の onClickイベント!");
+        if (dev) console.log("id:copy_clip の onClickイベント!");
 
         break;
       case "copy_title":
         pageTweeterActions.copy(tab, true);
-        console.log("id:copy_title の onClickイベント!");
+        if (dev) console.log("id:copy_title の onClickイベント!");
 
         break;
       default:
-        console.log("Error! case is not exist.");
+        if (dev) console.log("Error! case is not exist.");
     }
   } else {
     pageTweeterActions.notifyError(0);
+  }
+});
+
+/////////////////////////////
+// clearNotify from pupup. //
+/////////////////////////////
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.type === "clearNotify") {
+    setTimeout(() => {
+      chrome.notifications.clear(message.id);
+    }, 6500);
+
+    sendResponse("clearNotify ok");
   }
 });

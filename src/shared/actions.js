@@ -136,9 +136,10 @@ self.pageTweeterActions = {
    * Notify unavailable message.
    * @param {number} type
    */
-  notifyError(type) {
-    const id = `PageTweeter${10000 * Math.random().toFixed(4)}`;
+  async notifyError(type) {
+    const id = `PageTweeter${(1000 + Math.random() * 8999).toFixed()}`;
     console.log(id);
+
     if (type === 0) {
       chrome.notifications.create(id, {
         title: "PageTweeter",
@@ -148,8 +149,21 @@ self.pageTweeterActions = {
       });
     }
 
-    setTimeout(() => {
-      chrome.notifications.clear(id);
-    }, 8000);
+    // popupではクリック後に閉じるため処理できないので、サービスワーカーに
+    // メッセージングして譲る
+    if (self.toString() === "[object Window]") {
+      try {
+        await chrome.runtime.sendMessage({
+          type: "clearNotify",
+          id: id,
+        });
+      } catch (err) {
+        console.error(err);
+      }
+    } else {
+      setTimeout(() => {
+        chrome.notifications.clear(id);
+      }, 6500);
+    }
   },
 };
