@@ -1,5 +1,5 @@
 "use strict";
-export const actions = {
+export default {
   get windowOptions() {
     return "scrollbars=yes,resizable=yes,toolbar=no,location=yes";
   },
