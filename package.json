@@ -2,11 +2,15 @@
   "name": "page-tweeter",
   "version": "4.5",
   "description": "You can tweet the URL you are viewing using RMB or Browser Action.",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "webpack watch --mode development",
     "dev": "webpack --mode development",
-    "prod": "webpack --mode production"
+    "prod": "webpack --mode production",
+    "eswatch": "node esbuild.config.js --watch",
+    "esdev": "node esbuild.config.js --development",
+    "esprod": "node esbuild.config.js --production"
   },
   "author": "Yu, kitsune Gadget",
   "private": "true",
@@ -17,6 +21,10 @@
   "devDependencies": {
     "@types/chrome": "^0.0.183",
     "copy-webpack-plugin": "^10.2.4",
+    "esbuild": "^0.14.43",
+    "esbuild-plugin-clean": "^0.9.0",
+    "esbuild-plugin-clear": "^1.0.1",
+    "esbuild-plugin-copy": "^1.3.0",
     "eslint": "^8.14.0",
     "eslint-config-google": "^0.14.0",
     "eslint-config-prettier": "^8.5.0",

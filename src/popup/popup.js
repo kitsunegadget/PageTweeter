@@ -1,5 +1,5 @@
 import { Actions } from "../shared/actions";
-import { _debugLog_ } from "../shared/debug";
+import { DEBUG_LOG } from "../shared/debug";
 
 const dev = process.env.NODE_ENV === "development";
 
@@ -35,7 +35,7 @@ async function applyActinonEvent() {
     });
 
   const tab = tabs[0];
-  _debugLog_?.(tab);
+  /* @__PURE__ */ DEBUG_LOG?.(tab);
 
   document.getElementById("tweet").onclick = async () => {
     Actions.createTweetWindow(tab);

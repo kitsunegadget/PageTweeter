@@ -54,7 +54,7 @@ const config = {
         { from: "./src/_locales", to: "_locales" },
       ],
     }),
-    new BundleAnalyzerPlugin(),
+    // new BundleAnalyzerPlugin(),
   ],
 };
 

@@ -1,7 +1,4 @@
 import { Actions } from "./shared/actions";
-import { _debugLog_ } from "./shared/debug";
-
-const dev = process.env.NODE_ENV === "development";
 
 //===================||
 // onInstalled event \/
@@ -12,7 +9,7 @@ chrome.runtime.onInstalled.addListener(() => {
       title: chrome.i18n.getMessage("tweet_page_text"),
     },
     () => {
-      if (dev) console.log("コンテキストメニュー(tweet_page)を登録したよ！"); // dev log
+      /* @__PURE__ */ console.log("コンテキストメニュー(tweet_page)を作成");
     }
   );
   chrome.contextMenus.create(
@@ -21,38 +18,40 @@ chrome.runtime.onInstalled.addListener(() => {
       title: chrome.i18n.getMessage("clipboard_text"),
     },
     () => {
-      if (dev) console.log("コンテキストメニュー(copy_clip)を登録したよ！"); // dev log
+      /* @__PURE__ */ console.log("コンテキストメニュー(copy_clip)を作成");
     }
   );
-  chrome.contextMenus.create(
-    {
-      id: "others",
-      title: chrome.i18n.getMessage("context_others"),
-    },
-    () => {
-      if (dev) console.log("コンテキストメニュー(others)を登録したよ！"); // dev log
-    }
-  );
+  // chrome.contextMenus.create(
+  //   {
+  //     id: "others",
+  //     title: chrome.i18n.getMessage("context_others"),
+  //   },
+  //   () => {
+  //     DEBUG_LOG?.log("コンテキストメニュー(others)を登録したよ！"); // dev log
+  //   }
+  // );
 
   // 子要素
   chrome.contextMenus.create(
     {
       id: "copy_md_format",
-      parentId: "others",
+      // parentId: "others",
       title: chrome.i18n.getMessage("clipboard_md_format_text"),
     },
     () => {
-      if (dev) console.log("コンテキストメニュー(copy_mdstyle)を登録したよ！"); // dev log
+      /* @__PURE__ */ console.log("コンテキストメニュー(copy_md_format)を作成");
     }
   );
   chrome.contextMenus.create(
     {
       id: "copy_only_title",
-      parentId: "others",
+      // parentId: "others",
       title: chrome.i18n.getMessage("clipboard_title_only_text"),
     },
     () => {
-      if (dev) console.log("コンテキストメニュー(copy_title)を登録したよ！"); // dev log
+      /* @__PURE__ */ console.log(
+        "コンテキストメニュー(copy_only_title)を作成"
+      );
     }
   );
 
@@ -83,22 +82,18 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
     switch (info.menuItemId) {
       case "tweet_page":
         Actions.createTweetWindow(tab);
-        _debugLog_?.("id:tweet_page の onClickイベント!");
         break;
 
       case "copy_clip":
         Actions.copy(tab);
-        _debugLog_?.("id:copy_clip の onClickイベント!");
         break;
 
       case "copy_md_format":
         Actions.copy(tab, "copy_md_format");
-        _debugLog_?.("id:copy_title の onClickイベント!");
         break;
 
       case "copy_only_title":
         Actions.copy(tab, "copy_only_title");
-        _debugLog_?.("id:copy_title の onClickイベント!");
         break;
 
       default:

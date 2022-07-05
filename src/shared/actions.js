@@ -1,4 +1,4 @@
-import { _debugLog_ } from "./debug";
+import { DEBUG_LOG } from "./debug";
 
 export const Actions = {
   get windowOptions() {
@@ -60,7 +60,10 @@ export const Actions = {
       top = Math.round((await this.screenHeight) / 2 - height / 2);
     }
 
-    _debugLog_?.(await this.screenWidth, await this.screenHeight);
+    /* @__PURE__ */ DEBUG_LOG?.(
+      await this.screenWidth,
+      await this.screenHeight
+    );
 
     // 文字数制限
     let shortenTitle = "";
@@ -83,7 +86,7 @@ export const Actions = {
       type: "popup",
     });
 
-    _debugLog_?.("PageTweeter: Create Tweet Window!");
+    /* @__PURE__ */ DEBUG_LOG?.("PageTweeter: Create Tweet Window!");
   },
 
   /**
@@ -100,20 +103,23 @@ export const Actions = {
     switch (copyType) {
       case "default": {
         this.writeClipBoard(tab.id, `${tab.title} ${tab.url}`);
-        _debugLog_?.("PageTweeter: Copy to ClipBoard!");
-
+        /* @__PURE__ */ DEBUG_LOG?.("PageTweeter: Copy to ClipBoard!");
         break;
       }
       case "copy_md_format":
         this.writeClipBoard(tab.id, `[${tab.title}](${tab.url})`);
-        _debugLog_?.("PageTweeter: Copy to ClipBoard! MarkDown style.");
-
+        /* @__PURE__ */ DEBUG_LOG?.(
+          "PageTweeter: Copy to ClipBoard! MarkDown style."
+        );
         break;
+
       case "copy_only_title":
         this.writeClipBoard(tab.id, tab.title);
-        _debugLog_?.("PageTweeter: Copy to ClipBoard! only Title.");
-
+        /* @__PURE__ */ DEBUG_LOG?.(
+          "PageTweeter: Copy to ClipBoard! only Title."
+        );
         break;
+
       default:
         throw new Error("Error! case is not exist.");
     }
@@ -149,7 +155,7 @@ export const Actions = {
    */
   async notifyError(type) {
     const id = `PageTweeter${(1000 + Math.random() * 8999).toFixed()}`;
-    _debugLog_?.(id);
+    /* @__PURE__ */ DEBUG_LOG?.(id);
 
     if (type === 0) {
       chrome.notifications.create(id, {
