@@ -8,14 +8,14 @@
   "clipboard_text": {
     "message": "タイトルとリンクのコピー"
   },
-  "context_others": {
-    "message": "その他"
-  },
   "clipboard_md_format_text": {
     "message": "マークダウン形式でコピー"
   },
   "clipboard_title_only_text": {
     "message": "タイトルのみコピー"
+  },
+  "rem_param_copy_url": {
+    "message": "パラメータを削除したURLのコピー"
   },
   "error_text_0": {
     "message": "このページでは利用できません"

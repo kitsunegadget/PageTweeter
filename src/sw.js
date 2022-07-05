@@ -3,57 +3,37 @@ import { Actions } from "./shared/actions";
 //===================||
 // onInstalled event \/
 chrome.runtime.onInstalled.addListener(() => {
-  chrome.contextMenus.create(
-    {
-      id: "tweet_page",
-      title: chrome.i18n.getMessage("tweet_page_text"),
-    },
-    () => {
-      /* @__PURE__ */ console.log("コンテキストメニュー(tweet_page)を作成");
-    }
-  );
-  chrome.contextMenus.create(
-    {
-      id: "copy_clip",
-      title: chrome.i18n.getMessage("clipboard_text"),
-    },
-    () => {
-      /* @__PURE__ */ console.log("コンテキストメニュー(copy_clip)を作成");
-    }
-  );
-  // chrome.contextMenus.create(
-  //   {
-  //     id: "others",
-  //     title: chrome.i18n.getMessage("context_others"),
-  //   },
-  //   () => {
-  //     DEBUG_LOG?.log("コンテキストメニュー(others)を登録したよ！"); // dev log
-  //   }
-  // );
+  chrome.contextMenus.create({
+    id: "tweet_page",
+    title: chrome.i18n.getMessage("tweet_page_text"),
+  });
+
+  chrome.contextMenus.create({
+    id: "copy_clip",
+    title: chrome.i18n.getMessage("clipboard_text"),
+  });
+
+  chrome.contextMenus.create({
+    id: "copy_md_format",
+    title: chrome.i18n.getMessage("clipboard_md_format_text"),
+  });
+
+  chrome.contextMenus.create({
+    id: "copy_only_title",
+    title: chrome.i18n.getMessage("clipboard_title_only_text"),
+  });
+
+  chrome.contextMenus.create({
+    id: "rem_param_copy_url",
+    title: chrome.i18n.getMessage("rem_param_copy_url"),
+  });
 
   // 子要素
-  chrome.contextMenus.create(
-    {
-      id: "copy_md_format",
-      // parentId: "others",
-      title: chrome.i18n.getMessage("clipboard_md_format_text"),
-    },
-    () => {
-      /* @__PURE__ */ console.log("コンテキストメニュー(copy_md_format)を作成");
-    }
-  );
-  chrome.contextMenus.create(
-    {
-      id: "copy_only_title",
-      // parentId: "others",
-      title: chrome.i18n.getMessage("clipboard_title_only_text"),
-    },
-    () => {
-      /* @__PURE__ */ console.log(
-        "コンテキストメニュー(copy_only_title)を作成"
-      );
-    }
-  );
+  // chrome.contextMenus.create({
+  //   id: "rem_param_copy_url",
+  //   parentId: "rem_param",
+  //   title: chrome.i18n.getMessage("rem_param_copy_url"),
+  // });
 
   // declartiveContent
   chrome.declarativeContent.onPageChanged.removeRules(undefined, () => {
@@ -94,6 +74,10 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
 
       case "copy_only_title":
         Actions.copy(tab, "copy_only_title");
+        break;
+
+      case "rem_param_copy_url":
+        Actions.copy(tab, "copy_url", true);
         break;
 
       default:

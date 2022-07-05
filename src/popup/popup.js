@@ -22,6 +22,9 @@ function applyLocaleText() {
   document.querySelector("#copy-title span").innerText = chrome.i18n.getMessage(
     "clipboard_title_only_text"
   );
+
+  document.querySelector("#rem-param-copy-url span").innerText =
+    chrome.i18n.getMessage("rem_param_copy_url");
 }
 
 async function applyActinonEvent() {
@@ -43,7 +46,7 @@ async function applyActinonEvent() {
   };
 
   // popup -> background での executeScript が上手くいかないため
-  // Actions を両方に含めることに
+  // Actions を sw と popup の両方にバンドルしています
   document.getElementById("copy").onclick = async () => {
     Actions.copy(tab);
     windowClose();
@@ -56,6 +59,11 @@ async function applyActinonEvent() {
 
   document.getElementById("copy-title").onclick = async () => {
     Actions.copy(tab, "copy_only_title");
+    windowClose();
+  };
+
+  document.getElementById("rem-param-copy-url").onclick = async () => {
+    Actions.copy(tab, "copy_url", true);
     windowClose();
   };
 }

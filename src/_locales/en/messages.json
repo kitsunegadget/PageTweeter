@@ -8,14 +8,14 @@
   "clipboard_text": {
     "message": "Copy title and Link"
   },
-  "context_others": {
-    "message": "Others"
-  },
   "clipboard_md_format_text": {
     "message": "Copy in Markdown format"
   },
   "clipboard_title_only_text": {
     "message": "Copy title only"
+  },
+  "rem_param_copy_url": {
+    "message": "Copy URL with parameters removed"
   },
   "error_text_0": {
     "message": "Unavailable on this page"

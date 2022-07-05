@@ -1,13 +1,19 @@
 import { DEBUG_LOG } from "./debug";
 
 export const Actions = {
+  /**
+   * tweetウィンドウ用のオプション
+   */
   get windowOptions() {
     return "scrollbars=yes,resizable=yes,toolbar=no,location=yes";
   },
 
+  /**
+   * スクリーン高さ
+   */
   get screenHeight() {
     const wrap = async () => {
-      if (self.hasOwnProperty("screen")) {
+      if (globalThis.hasOwnProperty("screen")) {
         return screen.height;
       } else {
         const displayInfo = await chrome.system.display.getInfo();
@@ -20,9 +26,12 @@ export const Actions = {
     return wrap();
   },
 
+  /**
+   * スクリーン幅
+   */
   get screenWidth() {
     const wrap = async () => {
-      if (self.hasOwnProperty("screen")) {
+      if (globalThis.hasOwnProperty("screen")) {
         return screen.width;
       } else {
         const displayInfo = await chrome.system.display.getInfo();
@@ -35,9 +44,22 @@ export const Actions = {
     return wrap();
   },
 
-  checkUrlScheme(tab) {
-    // 共有すると危ういスキームはバイパスさせる
-    return /^http(s|):\/\/.+?\/.*/g.test(tab.url);
+  /**
+   * スキームのチェック
+   * @param {string} url A URL string.
+   * @returns {boolean} Only "http" or "https" scheme is true.
+   */
+  checkUrlScheme(url) {
+    return /^http(s|):\/\/.+?\/.*/g.test(url);
+  },
+
+  /**
+   * URLパラメーターを削除
+   * @param {string} url
+   * @returns {string} A URL with parameters removed.
+   */
+  removeParameter(url) {
+    return url.replace(/\?.+/, "");
   },
 
   /**
@@ -45,7 +67,7 @@ export const Actions = {
    * @param {chrome.tabs.Tab} tab
    */
   async createTweetWindow(tab) {
-    if (!this.checkUrlScheme(tab)) {
+    if (!this.checkUrlScheme(tab.url)) {
       this.notifyError(0);
       return;
     }
@@ -91,23 +113,26 @@ export const Actions = {
 
   /**
    * Copy to string.
-   * @param {chrome.tabs.Tab} tab
-   * @param {string} copyType
+   * @param {chrome.tabs.Tab} tab A copy url from tab.
+   * @param {string} copyType A copy type.
+   * @param {boolean} remParam Flag to remove parameter.
    */
-  async copy(tab, copyType = "default") {
-    if (!this.checkUrlScheme(tab)) {
+  async copy(tab, copyType = "default", remParam = false) {
+    if (!this.checkUrlScheme(tab.url)) {
       this.notifyError(0);
       return;
     }
 
+    const url = remParam ? this.removeParameter(tab.url) : tab.url;
+
     switch (copyType) {
       case "default": {
-        this.writeClipBoard(tab.id, `${tab.title} ${tab.url}`);
+        this.writeClipBoard(tab.id, `${tab.title} ${url}`);
         /* @__PURE__ */ DEBUG_LOG?.("PageTweeter: Copy to ClipBoard!");
         break;
       }
       case "copy_md_format":
-        this.writeClipBoard(tab.id, `[${tab.title}](${tab.url})`);
+        this.writeClipBoard(tab.id, `[${tab.title}](${url})`);
         /* @__PURE__ */ DEBUG_LOG?.(
           "PageTweeter: Copy to ClipBoard! MarkDown style."
         );
@@ -120,6 +145,13 @@ export const Actions = {
         );
         break;
 
+      case "copy_url":
+        this.writeClipBoard(tab.id, url);
+        /* @__PURE__ */ DEBUG_LOG?.(
+          "PageTweeter: Copy to ClipBoard! only removed param URL."
+        );
+        break;
+
       default:
         throw new Error("Error! case is not exist.");
     }
@@ -127,8 +159,8 @@ export const Actions = {
 
   /**
    * Apply writing to the ClipBoard.
-   * @param {number} tabId chrome Tab id.
-   * @param {string} text write text.
+   * @param {number} tabId A chrome Tab id.
+   * @param {string} text A text to write.
    */
   async writeClipBoard(tabId, text) {
     try {
