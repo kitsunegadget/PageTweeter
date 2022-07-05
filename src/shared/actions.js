@@ -1,7 +1,7 @@
-"use strict";
+const dev = process.env.NODE_ENV === "development";
 
 // importScript読み込み時に、グローバルスコープで扱えるようにする
-console.log("imported script!");
+if (dev) console.log("imported script!"); // dev log
 
 self.pageTweeterActions = {
   get windowOptions() {
@@ -63,7 +63,7 @@ self.pageTweeterActions = {
       top = Math.round((await this.screenHeight) / 2 - height / 2);
     }
 
-    console.log(await this.screenWidth, await this.screenHeight);
+    if (dev) console.log(await this.screenWidth, await this.screenHeight); // dev log
 
     // 文字数制限
     let shortenTitle = "";
@@ -86,7 +86,7 @@ self.pageTweeterActions = {
       type: "popup",
     });
 
-    console.log("PageTweeter: Create Tweet Window!");
+    if (dev) console.log("PageTweeter: Create Tweet Window!"); // dev log
   },
 
   /**
@@ -102,10 +102,10 @@ self.pageTweeterActions = {
 
     if (onlyTitle) {
       this.writeClipBoard(tab.id, tab.title);
-      console.log("PageTweeter: Copy to ClipBoard! only Title.");
+      if (dev) console.log("PageTweeter: Copy to ClipBoard! only Title."); // dev log
     } else {
       this.writeClipBoard(tab.id, `${tab.title} ${tab.url}`);
-      console.log("PageTweeter: Copy to ClipBoard!");
+      if (dev) console.log("PageTweeter: Copy to ClipBoard!"); // dev log
     }
   },
 
@@ -139,7 +139,7 @@ self.pageTweeterActions = {
    */
   async notifyError(type) {
     const id = `PageTweeter${(1000 + Math.random() * 8999).toFixed()}`;
-    console.log(id);
+    if (dev) console.log(id); // dev log
 
     if (type === 0) {
       chrome.notifications.create(id, {

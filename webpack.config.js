@@ -18,12 +18,14 @@ const config = {
     //   filename: "shared/actions.js",
     // }
     // actions が sw と popup に重複するが、
-    // splitchunks をするとなぜか動いてくれなくなるので、あえてそのままに
+    // splitchunks をするとactionsが通常ロードされないために動いてくれなくなるので、
+    // あえてそのままに。
+    // 後読みできるDynamic ImportやImport Scriptであればpopupは動くのだが、
+    // SW内部で動いてくれない
   },
   output: {
     filename: "[name].js",
     path: path.resolve(__dirname, "dist"),
-    asyncChunks: true,
     clean: true,
   },
   // optimization: {

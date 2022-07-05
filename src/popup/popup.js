@@ -1,6 +1,6 @@
-"use strict";
-
 import "../shared/actions";
+
+const dev = process.env.NODE_ENV === "development";
 
 window.onload = async function () {
   const tabs = await chrome.tabs
@@ -9,26 +9,24 @@ window.onload = async function () {
       currentWindow: true,
     })
     .catch((err) => {
-      const bgWindow = chrome.extension.getBackgroundPage();
-      bgWindow.popupAlert();
       throw err;
     });
-    
+
   const tab = tabs[0];
-  console.log(tab);
+  if (dev) console.log(tab); // dev log
 
   document.getElementById("tweet").onclick = () => {
     pageTweeterActions.createTweetWindow(tab);
-    window.close();
+    if (!dev) window.close();
   };
 
   document.getElementById("copy").onclick = () => {
     pageTweeterActions.copy(tab);
-    window.close();
+    if (!dev) window.close();
   };
 
   document.getElementById("copy-title").onclick = () => {
     pageTweeterActions.copy(tab, true);
-    window.close();
+    if (!dev) window.close();
   };
 };

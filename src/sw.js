@@ -1,10 +1,10 @@
-"use strict";
-
 import "./shared/actions";
 
-//
-// onInstalled event
-//
+const dev = process.env.NODE_ENV === "development";
+
+///////////////////////
+// onInstalled event //
+///////////////////////
 chrome.runtime.onInstalled.addListener(() => {
   chrome.contextMenus.create(
     {
@@ -12,7 +12,7 @@ chrome.runtime.onInstalled.addListener(() => {
       title: "このページをツイート",
     },
     () => {
-      console.log("コンテキストメニュー(tweet_page)を登録したよ！");
+      if (dev) console.log("コンテキストメニュー(tweet_page)を登録したよ！");
     }
   );
   chrome.contextMenus.create(
@@ -21,7 +21,7 @@ chrome.runtime.onInstalled.addListener(() => {
       title: "クリップボードにコピー",
     },
     () => {
-      console.log("コンテキストメニュー(copy_clip)を登録したよ！");
+      if (dev) console.log("コンテキストメニュー(copy_clip)を登録したよ！");
     }
   );
   chrome.contextMenus.create(
@@ -30,7 +30,7 @@ chrome.runtime.onInstalled.addListener(() => {
       title: "その他",
     },
     () => {
-      console.log("コンテキストメニュー(others)を登録したよ！");
+      if (dev) console.log("コンテキストメニュー(others)を登録したよ！");
     }
   );
   // 子要素
@@ -41,7 +41,7 @@ chrome.runtime.onInstalled.addListener(() => {
       title: "ページタイトルのみをコピー",
     },
     () => {
-      console.log("コンテキストメニュー(copy_title)を登録したよ！");
+      if (dev) console.log("コンテキストメニュー(copy_title)を登録したよ！");
     }
   );
 
