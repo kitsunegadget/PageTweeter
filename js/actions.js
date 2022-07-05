@@ -3,6 +3,7 @@ export const actions = {
   get windowOptions() {
     return "scrollbars=yes,resizable=yes,toolbar=no,location=yes";
   },
+
   get screenHeight() {
     const screenWrap = async () => {
       // eslint-disable-next-line no-prototype-builtins
@@ -19,6 +20,7 @@ export const actions = {
 
     return screenWrap();
   },
+
   get screenWidth() {
     const screenWrap = async () => {
       // eslint-disable-next-line no-prototype-builtins
@@ -36,18 +38,22 @@ export const actions = {
     return screenWrap();
   },
 
+  checkUrlScheme(tab) {
+    // 共有すると危ういURLはバイパスさせる
+    return /^http(s|):\/\/.*\/.*/g.test(tab.url);
+  },
+
   /**
    * Create tweet window.
    * @param {chrome.tabs.Tab} tab
    */
   async createTweetWindow(tab) {
-    // 共有すると危ういURLはバイパスする
-    if (!/^http(s|):\/\/.*\/.*/g.test(tab.url)) {
+    if (!this.checkUrlScheme(tab)) {
       this.notifyError(0);
       return;
     }
 
-    //表示位置設定
+    // 表示位置設定
     const width = 550;
     const height = 570;
     const left = Math.round((await this.screenWidth) / 2 - width / 2);
@@ -59,7 +65,7 @@ export const actions = {
 
     console.log(await this.screenWidth, await this.screenHeight);
 
-    //文字数制限
+    // 文字数制限
     let shortenTitle = "";
     if (tab.title.length + 48 > 140) {
       shortenTitle = tab.title.substring(0, 140 - 48) + "...";
@@ -67,7 +73,7 @@ export const actions = {
       shortenTitle = tab.title;
     }
 
-    //エンコード
+    // エンコード
     const url = encodeURIComponent(tab.url);
     const title = encodeURIComponent(shortenTitle);
 
@@ -90,8 +96,7 @@ export const actions = {
    * @param {boolean} onlyTitle
    */
   async copy(tab, onlyTitle = false) {
-    // 共有すると危ういURLはバイパスする
-    if (!/^http(s|):\/\/.*\/.*/g.test(tab.url)) {
+    if (!this.checkUrlScheme(tab)) {
       this.notifyError(0);
       return;
     }
@@ -105,10 +110,10 @@ export const actions = {
     }
   },
 
-
   /**
    * Apply writing to the ClipBoard.
-   * @param {string} text 
+   * @param {number} tabId chrome Tab id.
+   * @param {string} text write text.
    */
   async writeClipBoard(tabId, text) {
     try {
@@ -118,12 +123,8 @@ export const actions = {
       } else {
         // eslint-disable-next-line no-undef
         await chrome.scripting.executeScript({
-          target: {
-            tabId: tabId,
-          },
-          args: [{
-            text: text,
-          }, ],
+          target: { tabId: tabId },
+          args: [{ text: text }],
           func: async (args) => {
             await navigator.clipboard.writeText(args.text);
           },
