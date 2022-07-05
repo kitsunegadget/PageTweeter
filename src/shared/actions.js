@@ -2,13 +2,14 @@
 
 // importScript読み込み時に、グローバルスコープで扱えるようにする
 console.log("imported script!");
+
 self.pageTweeterActions = {
   get windowOptions() {
     return "scrollbars=yes,resizable=yes,toolbar=no,location=yes";
   },
 
   get screenHeight() {
-    const screenWrap = async () => {
+    const wrap = async () => {
       if (self.hasOwnProperty("screen")) {
         return screen.height;
       } else {
@@ -19,11 +20,11 @@ self.pageTweeterActions = {
       }
     };
 
-    return screenWrap();
+    return wrap();
   },
 
   get screenWidth() {
-    const screenWrap = async () => {
+    const wrap = async () => {
       if (self.hasOwnProperty("screen")) {
         return screen.width;
       } else {
@@ -34,7 +35,7 @@ self.pageTweeterActions = {
       }
     };
 
-    return screenWrap();
+    return wrap();
   },
 
   checkUrlScheme(tab) {
