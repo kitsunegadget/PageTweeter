@@ -137,25 +137,24 @@ export const actions = {
 
   /**
    * Notify unavailable message.
-   * @param {number} type 
+   * @param {number} type
    */
   notifyError(type) {
-    const id = `PageTweeter${10000 * (Math.random().toFixed(4))}`;
+    const id = `PageTweeter${10000 * Math.random().toFixed(4)}`;
     console.log(id);
     if (type === 0) {
       // eslint-disable-next-line no-undef
-      chrome.notifications.create(
-        id, {
-          title: "PageTweeter",
-          message: "Unavailable on this page.",
-          iconUrl: "./PTicon.png",
-          type: "basic"
-        });
+      chrome.notifications.create(id, {
+        title: "PageTweeter",
+        message: "Unavailable on this page.",
+        iconUrl: "./PTicon.png",
+        type: "basic",
+      });
     }
 
     setTimeout(() => {
       // eslint-disable-next-line no-undef
       chrome.notifications.clear(id);
     }, 10000);
-  }
+  },
 };
