@@ -148,7 +148,8 @@ export default {
       chrome.notifications.create(id, {
         title: "PageTweeter",
         message: "Unavailable on this page.",
-        iconUrl: "./PTicon.png",
+        // eslint-disable-next-line no-undef
+        iconUrl: chrome.runtime.getURL("PTicon.png"),
         type: "basic",
       });
     }
