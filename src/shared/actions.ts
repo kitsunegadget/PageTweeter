@@ -1,5 +1,3 @@
-import { DEBUG_LOG } from "./debug";
-
 export const Actions = {
   /**
    * tweetウィンドウ用のオプション
@@ -49,7 +47,7 @@ export const Actions = {
    * @param {string} url A URL string.
    * @returns {boolean} Only "http" or "https" scheme is true.
    */
-  checkUrlScheme(url) {
+  checkUrlScheme(url: string): boolean {
     return /^http(s|):\/\/.+?\/.*/g.test(url);
   },
 
@@ -58,15 +56,15 @@ export const Actions = {
    * @param {string} url
    * @returns {string} A URL with parameters removed.
    */
-  removeParameter(url) {
+  removeParameter(url: string): string {
     return url.replace(/\?.+/, "");
   },
 
   /**
    * Create tweet window.
-   * @param {chrome.tabs.Tab} tab
+   * @param {DefinedTab} tab
    */
-  async createTweetWindow(tab) {
+  async createTweetWindow(tab: DefinedTab) {
     if (!this.checkUrlScheme(tab.url)) {
       this.notifyError(0);
       return;
@@ -78,21 +76,17 @@ export const Actions = {
     const left = Math.round((await this.screenWidth) / 2 - width / 2);
     let top = 0;
 
-    if (this.winHeight > height) {
+    if ((await this.screenHeight) > height) {
       top = Math.round((await this.screenHeight) / 2 - height / 2);
     }
 
-    /* @__PURE__ */ DEBUG_LOG?.(
-      await this.screenWidth,
-      await this.screenHeight
-    );
+    /* @__PURE__ */
+    console.log(await this.screenWidth, await this.screenHeight);
 
     // 文字数制限
-    let shortenTitle = "";
+    let shortenTitle = tab.title;
     if (tab.title.length + 48 > 140) {
       shortenTitle = tab.title.substring(0, 140 - 48) + "...";
-    } else {
-      shortenTitle = tab.title;
     }
 
     // エンコード
@@ -108,16 +102,21 @@ export const Actions = {
       type: "popup",
     });
 
-    /* @__PURE__ */ DEBUG_LOG?.("PageTweeter: Create Tweet Window!");
+    /* @__PURE__ */
+    console.log("PageTweeter: Create Tweet Window!");
   },
 
   /**
    * Copy to string.
-   * @param {chrome.tabs.Tab} tab A copy url from tab.
+   * @param {DefinedTab} tab A copy url from tab.
    * @param {string} copyType A copy type.
    * @param {boolean} remParam Flag to remove parameter.
    */
-  async copy(tab, copyType = "default", remParam = false) {
+  async copy(
+    tab: DefinedTab,
+    copyType: string = "default",
+    remParam: boolean = false
+  ) {
     if (!this.checkUrlScheme(tab.url)) {
       this.notifyError(0);
       return;
@@ -127,29 +126,35 @@ export const Actions = {
 
     switch (copyType) {
       case "default": {
-        this.writeClipBoard(tab.id, `${tab.title} ${url}`);
-        /* @__PURE__ */ DEBUG_LOG?.("PageTweeter: Copy to ClipBoard!");
+        this.writeClipBoard(tab.id!, `${tab.title} ${url}`);
+
+        /* @__PURE__ */
+        console.log("PageTweeter: Copy to ClipBoard!");
+
         break;
       }
       case "copy_md_format":
         this.writeClipBoard(tab.id, `[${tab.title}](${url})`);
-        /* @__PURE__ */ DEBUG_LOG?.(
-          "PageTweeter: Copy to ClipBoard! MarkDown style."
-        );
+
+        /* @__PURE__ */
+        console.log("PageTweeter: Copy to ClipBoard! MarkDown style.");
+
         break;
 
       case "copy_only_title":
         this.writeClipBoard(tab.id, tab.title);
-        /* @__PURE__ */ DEBUG_LOG?.(
-          "PageTweeter: Copy to ClipBoard! only Title."
-        );
+
+        /* @__PURE__ */
+        console.log("PageTweeter: Copy to ClipBoard! only Title.");
+
         break;
 
       case "copy_url":
         this.writeClipBoard(tab.id, url);
-        /* @__PURE__ */ DEBUG_LOG?.(
-          "PageTweeter: Copy to ClipBoard! only removed param URL."
-        );
+
+        /* @__PURE__ */
+        console.log("PageTweeter: Copy to ClipBoard! only removed param URL.");
+
         break;
 
       default:
@@ -162,7 +167,7 @@ export const Actions = {
    * @param {number} tabId A chrome Tab id.
    * @param {string} text A text to write.
    */
-  async writeClipBoard(tabId, text) {
+  async writeClipBoard(tabId: number, text: string) {
     try {
       if (navigator.clipboard) {
         await navigator.clipboard.writeText(text);
@@ -185,9 +190,11 @@ export const Actions = {
    * Notify unavailable message.
    * @param {number} type
    */
-  async notifyError(type) {
+  async notifyError(type: number) {
     const id = `PageTweeter${(1000 + Math.random() * 8999).toFixed()}`;
-    /* @__PURE__ */ DEBUG_LOG?.(id);
+
+    /* @__PURE__ */
+    console.log(id);
 
     if (type === 0) {
       chrome.notifications.create(id, {
@@ -207,7 +214,7 @@ export const Actions = {
           id: id,
         });
       } catch (err) {
-        throw new Error(err);
+        throw new Error(err as string);
       }
     } else {
       setTimeout(() => {
