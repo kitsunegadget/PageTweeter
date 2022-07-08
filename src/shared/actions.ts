@@ -78,7 +78,7 @@ export const Actions = {
     const left = Math.round((await this.screenWidth) / 2 - width / 2);
     let top = 0;
 
-    if (this.winHeight > height) {
+    if ((await this.screenHeight) > height) {
       top = Math.round((await this.screenHeight) / 2 - height / 2);
     }
 
