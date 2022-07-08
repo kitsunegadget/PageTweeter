@@ -49,7 +49,7 @@ export const Actions = {
    * @param {string} url A URL string.
    * @returns {boolean} Only "http" or "https" scheme is true.
    */
-  checkUrlScheme(url) {
+  checkUrlScheme(url: string): boolean {
     return /^http(s|):\/\/.+?\/.*/g.test(url);
   },
 
@@ -58,7 +58,7 @@ export const Actions = {
    * @param {string} url
    * @returns {string} A URL with parameters removed.
    */
-  removeParameter(url) {
+  removeParameter(url: string): string {
     return url.replace(/\?.+/, "");
   },
 
@@ -66,8 +66,8 @@ export const Actions = {
    * Create tweet window.
    * @param {chrome.tabs.Tab} tab
    */
-  async createTweetWindow(tab) {
-    if (!this.checkUrlScheme(tab.url)) {
+  async createTweetWindow(tab: chrome.tabs.Tab) {
+    if (!this.checkUrlScheme(tab.url!)) {
       this.notifyError(0);
       return;
     }
@@ -88,15 +88,13 @@ export const Actions = {
     );
 
     // 文字数制限
-    let shortenTitle = "";
-    if (tab.title.length + 48 > 140) {
+    let shortenTitle = tab.title ?? "";
+    if (tab.title && tab.title.length + 48 > 140) {
       shortenTitle = tab.title.substring(0, 140 - 48) + "...";
-    } else {
-      shortenTitle = tab.title;
     }
 
     // エンコード
-    const url = encodeURIComponent(tab.url);
+    const url = encodeURIComponent(tab.url!);
     const title = encodeURIComponent(shortenTitle);
 
     chrome.windows.create({
@@ -117,36 +115,40 @@ export const Actions = {
    * @param {string} copyType A copy type.
    * @param {boolean} remParam Flag to remove parameter.
    */
-  async copy(tab, copyType = "default", remParam = false) {
-    if (!this.checkUrlScheme(tab.url)) {
+  async copy(
+    tab: chrome.tabs.Tab,
+    copyType: string = "default",
+    remParam: boolean = false
+  ) {
+    if (!this.checkUrlScheme(tab.url!)) {
       this.notifyError(0);
       return;
     }
 
-    const url = remParam ? this.removeParameter(tab.url) : tab.url;
+    const url = remParam ? this.removeParameter(tab.url!) : tab.url!;
 
     switch (copyType) {
       case "default": {
-        this.writeClipBoard(tab.id, `${tab.title} ${url}`);
+        this.writeClipBoard(tab.id!, `${tab.title} ${url}`);
         /* @__PURE__ */ DEBUG_LOG?.("PageTweeter: Copy to ClipBoard!");
         break;
       }
       case "copy_md_format":
-        this.writeClipBoard(tab.id, `[${tab.title}](${url})`);
+        this.writeClipBoard(tab.id!, `[${tab.title}](${url})`);
         /* @__PURE__ */ DEBUG_LOG?.(
           "PageTweeter: Copy to ClipBoard! MarkDown style."
         );
         break;
 
       case "copy_only_title":
-        this.writeClipBoard(tab.id, tab.title);
+        this.writeClipBoard(tab.id!, tab.title!);
         /* @__PURE__ */ DEBUG_LOG?.(
           "PageTweeter: Copy to ClipBoard! only Title."
         );
         break;
 
       case "copy_url":
-        this.writeClipBoard(tab.id, url);
+        this.writeClipBoard(tab.id!, url);
         /* @__PURE__ */ DEBUG_LOG?.(
           "PageTweeter: Copy to ClipBoard! only removed param URL."
         );
@@ -162,7 +164,7 @@ export const Actions = {
    * @param {number} tabId A chrome Tab id.
    * @param {string} text A text to write.
    */
-  async writeClipBoard(tabId, text) {
+  async writeClipBoard(tabId: number, text: string) {
     try {
       if (navigator.clipboard) {
         await navigator.clipboard.writeText(text);
@@ -185,7 +187,7 @@ export const Actions = {
    * Notify unavailable message.
    * @param {number} type
    */
-  async notifyError(type) {
+  async notifyError(type: number) {
     const id = `PageTweeter${(1000 + Math.random() * 8999).toFixed()}`;
     /* @__PURE__ */ DEBUG_LOG?.(id);
 
@@ -207,7 +209,7 @@ export const Actions = {
           id: id,
         });
       } catch (err) {
-        throw new Error(err);
+        throw new Error(err as string);
       }
     } else {
       setTimeout(() => {
