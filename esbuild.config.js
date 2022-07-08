@@ -6,7 +6,7 @@ import { clean } from "esbuild-plugin-clean";
   const args = process.argv.slice(2);
 
   const result = await esbuild.build({
-    entryPoints: ["src/sw.js", "src/popup/popup.js"],
+    entryPoints: ["src/sw.ts", "src/popup/popup.ts"],
     bundle: true,
     outdir: "dist",
     outbase: "src",
