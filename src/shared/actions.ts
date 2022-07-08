@@ -1,5 +1,3 @@
-import { DEBUG_LOG } from "./debug";
-
 export const Actions = {
   /**
    * tweetウィンドウ用のオプション
@@ -82,10 +80,8 @@ export const Actions = {
       top = Math.round((await this.screenHeight) / 2 - height / 2);
     }
 
-    /* @__PURE__ */ DEBUG_LOG?.(
-      await this.screenWidth,
-      await this.screenHeight
-    );
+    /* @__PURE__ */
+    console.log(await this.screenWidth, await this.screenHeight);
 
     // 文字数制限
     let shortenTitle = tab.title ?? "";
@@ -106,7 +102,8 @@ export const Actions = {
       type: "popup",
     });
 
-    /* @__PURE__ */ DEBUG_LOG?.("PageTweeter: Create Tweet Window!");
+    /* @__PURE__ */
+    console.log("PageTweeter: Create Tweet Window!");
   },
 
   /**
@@ -130,28 +127,34 @@ export const Actions = {
     switch (copyType) {
       case "default": {
         this.writeClipBoard(tab.id!, `${tab.title} ${url}`);
-        /* @__PURE__ */ DEBUG_LOG?.("PageTweeter: Copy to ClipBoard!");
+
+        /* @__PURE__ */
+        console.log("PageTweeter: Copy to ClipBoard!");
+
         break;
       }
       case "copy_md_format":
         this.writeClipBoard(tab.id!, `[${tab.title}](${url})`);
-        /* @__PURE__ */ DEBUG_LOG?.(
-          "PageTweeter: Copy to ClipBoard! MarkDown style."
-        );
+
+        /* @__PURE__ */
+        console.log("PageTweeter: Copy to ClipBoard! MarkDown style.");
+
         break;
 
       case "copy_only_title":
         this.writeClipBoard(tab.id!, tab.title!);
-        /* @__PURE__ */ DEBUG_LOG?.(
-          "PageTweeter: Copy to ClipBoard! only Title."
-        );
+
+        /* @__PURE__ */
+        console.log("PageTweeter: Copy to ClipBoard! only Title.");
+
         break;
 
       case "copy_url":
         this.writeClipBoard(tab.id!, url);
-        /* @__PURE__ */ DEBUG_LOG?.(
-          "PageTweeter: Copy to ClipBoard! only removed param URL."
-        );
+
+        /* @__PURE__ */
+        console.log("PageTweeter: Copy to ClipBoard! only removed param URL.");
+
         break;
 
       default:
@@ -189,7 +192,9 @@ export const Actions = {
    */
   async notifyError(type: number) {
     const id = `PageTweeter${(1000 + Math.random() * 8999).toFixed()}`;
-    /* @__PURE__ */ DEBUG_LOG?.(id);
+
+    /* @__PURE__ */
+    console.log(id);
 
     if (type === 0) {
       chrome.notifications.create(id, {
