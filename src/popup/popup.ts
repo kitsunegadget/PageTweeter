@@ -40,30 +40,36 @@ async function applyActinonEvent() {
   /* @__PURE__ */
   console.log(tab);
 
+  const definedTab: DefinedTab = {
+    id: tab.id ?? 0,
+    url: tab.url ?? "",
+    title: tab.title ?? "",
+  };
+
   document.getElementById("tweet")!.onclick = async () => {
-    Actions.createTweetWindow(tab);
+    Actions.createTweetWindow(definedTab);
     windowClose();
   };
 
   // popup -> background での executeScript が上手くいかないため
   // Actions を sw と popup の両方にバンドルしています
   document.getElementById("copy")!.onclick = async () => {
-    Actions.copy(tab);
+    Actions.copy(definedTab);
     windowClose();
   };
 
   document.getElementById("copy-md-format")!.onclick = async () => {
-    Actions.copy(tab, "copy_md_format");
+    Actions.copy(definedTab, "copy_md_format");
     windowClose();
   };
 
   document.getElementById("copy-title")!.onclick = async () => {
-    Actions.copy(tab, "copy_only_title");
+    Actions.copy(definedTab, "copy_only_title");
     windowClose();
   };
 
   document.getElementById("rem-param-copy-url")!.onclick = async () => {
-    Actions.copy(tab, "copy_url", true);
+    Actions.copy(definedTab, "copy_url", true);
     windowClose();
   };
 }

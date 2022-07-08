@@ -59,25 +59,31 @@ chrome.runtime.onInstalled.addListener(() => {
 // Process from contextMenu \/
 chrome.contextMenus.onClicked.addListener((info, tab) => {
   if (tab) {
+    const definedTab: DefinedTab = {
+      id: tab.id ?? 0,
+      url: tab.url ?? "",
+      title: tab.title ?? "",
+    };
+
     switch (info.menuItemId) {
       case "tweet_page":
-        Actions.createTweetWindow(tab);
+        Actions.createTweetWindow(definedTab);
         break;
 
       case "copy_clip":
-        Actions.copy(tab);
+        Actions.copy(definedTab);
         break;
 
       case "copy_md_format":
-        Actions.copy(tab, "copy_md_format");
+        Actions.copy(definedTab, "copy_md_format");
         break;
 
       case "copy_only_title":
-        Actions.copy(tab, "copy_only_title");
+        Actions.copy(definedTab, "copy_only_title");
         break;
 
       case "rem_param_copy_url":
-        Actions.copy(tab, "copy_url", true);
+        Actions.copy(definedTab, "copy_url", true);
         break;
 
       default:

@@ -62,10 +62,10 @@ export const Actions = {
 
   /**
    * Create tweet window.
-   * @param {chrome.tabs.Tab} tab
+   * @param {DefinedTab} tab
    */
-  async createTweetWindow(tab: chrome.tabs.Tab) {
-    if (!this.checkUrlScheme(tab.url!)) {
+  async createTweetWindow(tab: DefinedTab) {
+    if (!this.checkUrlScheme(tab.url)) {
       this.notifyError(0);
       return;
     }
@@ -84,13 +84,13 @@ export const Actions = {
     console.log(await this.screenWidth, await this.screenHeight);
 
     // 文字数制限
-    let shortenTitle = tab.title ?? "";
-    if (tab.title && tab.title.length + 48 > 140) {
+    let shortenTitle = tab.title;
+    if (tab.title.length + 48 > 140) {
       shortenTitle = tab.title.substring(0, 140 - 48) + "...";
     }
 
     // エンコード
-    const url = encodeURIComponent(tab.url!);
+    const url = encodeURIComponent(tab.url);
     const title = encodeURIComponent(shortenTitle);
 
     chrome.windows.create({
@@ -108,21 +108,21 @@ export const Actions = {
 
   /**
    * Copy to string.
-   * @param {chrome.tabs.Tab} tab A copy url from tab.
+   * @param {DefinedTab} tab A copy url from tab.
    * @param {string} copyType A copy type.
    * @param {boolean} remParam Flag to remove parameter.
    */
   async copy(
-    tab: chrome.tabs.Tab,
+    tab: DefinedTab,
     copyType: string = "default",
     remParam: boolean = false
   ) {
-    if (!this.checkUrlScheme(tab.url!)) {
+    if (!this.checkUrlScheme(tab.url)) {
       this.notifyError(0);
       return;
     }
 
-    const url = remParam ? this.removeParameter(tab.url!) : tab.url!;
+    const url = remParam ? this.removeParameter(tab.url) : tab.url;
 
     switch (copyType) {
       case "default": {
@@ -134,7 +134,7 @@ export const Actions = {
         break;
       }
       case "copy_md_format":
-        this.writeClipBoard(tab.id!, `[${tab.title}](${url})`);
+        this.writeClipBoard(tab.id, `[${tab.title}](${url})`);
 
         /* @__PURE__ */
         console.log("PageTweeter: Copy to ClipBoard! MarkDown style.");
@@ -142,7 +142,7 @@ export const Actions = {
         break;
 
       case "copy_only_title":
-        this.writeClipBoard(tab.id!, tab.title!);
+        this.writeClipBoard(tab.id, tab.title);
 
         /* @__PURE__ */
         console.log("PageTweeter: Copy to ClipBoard! only Title.");
@@ -150,7 +150,7 @@ export const Actions = {
         break;
 
       case "copy_url":
-        this.writeClipBoard(tab.id!, url);
+        this.writeClipBoard(tab.id, url);
 
         /* @__PURE__ */
         console.log("PageTweeter: Copy to ClipBoard! only removed param URL.");
