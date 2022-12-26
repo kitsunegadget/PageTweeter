@@ -89,12 +89,17 @@ export const Actions = {
       shortenTitle = tab.title.substring(0, 140 - 48) + "...";
     }
 
-    // エンコード
-    const url = encodeURIComponent(tab.url);
-    const title = encodeURIComponent(shortenTitle);
+    // URL 作成
+    const intentURL = new URL("https://twitter.com/intent/tweet");
+    intentURL.searchParams.set("text", shortenTitle);
+    intentURL.searchParams.set("url", tab.url);
+    intentURL.searchParams.set(
+      "related",
+      "kitsunegadget:PageTweeter created by"
+    );
 
     chrome.windows.create({
-      url: `https://twitter.com/intent/tweet?text=${title}&url=${url}&related=kitsunegadget%3APageTweeter%20created%20by`,
+      url: intentURL.toString(),
       width: width,
       height: height,
       top: top,
