@@ -84,10 +84,10 @@ export const Actions = {
     console.log(await this.screenWidth, await this.screenHeight);
 
     // 文字数制限
-    let shortenTitle = tab.title;
-    if (tab.title.length + 48 > 140) {
-      shortenTitle = tab.title.substring(0, 140 - 48) + "...";
-    }
+    const shortenTitle =
+      tab.title.length + 48 > 140
+        ? tab.title.slice(0, 140 - 48) + "..."
+        : tab.title;
 
     // URL 作成
     const intentURL = new URL("https://twitter.com/intent/tweet");
