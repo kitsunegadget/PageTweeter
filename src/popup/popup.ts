@@ -54,22 +54,22 @@ async function applyActinonEvent() {
   // popup -> background での executeScript が上手くいかないため
   // Actions を sw と popup の両方にバンドルしています
   document.getElementById("copy")!.onclick = async () => {
-    Actions.copy(definedTab);
+    Actions.copy(definedTab, "COPY");
     windowClose();
   };
 
   document.getElementById("copy-md-format")!.onclick = async () => {
-    Actions.copy(definedTab, "copy_md_format");
+    Actions.copy(definedTab, "MD_FORMAT");
     windowClose();
   };
 
   document.getElementById("copy-title")!.onclick = async () => {
-    Actions.copy(definedTab, "copy_only_title");
+    Actions.copy(definedTab, "ONLY_TITLE");
     windowClose();
   };
 
   document.getElementById("rem-param-copy-url")!.onclick = async () => {
-    Actions.copy(definedTab, "copy_url", true);
+    Actions.copy(definedTab, "ONLY_URL", true);
     windowClose();
   };
 }
