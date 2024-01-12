@@ -18,6 +18,9 @@ function applyLocaleText() {
   document.querySelector<HTMLElement>("#copy span")!.innerText =
     chrome.i18n.getMessage("clipboard_text");
 
+  document.querySelector<HTMLElement>("#copy-md-format span")!.innerText =
+    chrome.i18n.getMessage("clipboard_md_format_text");
+
   document.querySelector<HTMLElement>("#copy-title span")!.innerText =
     chrome.i18n.getMessage("clipboard_title_only_text");
 
