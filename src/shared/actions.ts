@@ -114,12 +114,12 @@ export const Actions = {
   /**
    * Copy to string.
    * @param {DefinedTab} tab A copy url from tab.
-   * @param {CopyType} copyType A copy type.
+   * @param {ActionType} actionType An action type.
    * @param {boolean} remParam Flag to remove parameter.
    */
   async copy(
     tab: DefinedTab,
-    copyType: CopyType = "COPY",
+    actionType: ActionType = "COPY",
     remParam: boolean = false
   ) {
     if (!this.checkUrlScheme(tab.url)) {
@@ -129,7 +129,7 @@ export const Actions = {
 
     const url = remParam ? this.removeParameter(tab.url) : tab.url;
 
-    switch (copyType) {
+    switch (actionType) {
       case "COPY": {
         this.writeClipBoard(tab.id!, `${tab.title} ${url}`);
 
@@ -137,21 +137,21 @@ export const Actions = {
         console.log("PageTweeter: Copy to ClipBoard!");
         break;
       }
-      case "MD_FORMAT":
+      case "COPY_MD_FORMAT":
         this.writeClipBoard(tab.id, `[${tab.title}](${url})`);
 
         /* @__PURE__ */
         console.log("PageTweeter: Copy to ClipBoard! MarkDown style.");
         break;
 
-      case "ONLY_TITLE":
+      case "COPY_ONLY_TITLE":
         this.writeClipBoard(tab.id, tab.title);
 
         /* @__PURE__ */
         console.log("PageTweeter: Copy to ClipBoard! only Title.");
         break;
 
-      case "ONLY_URL":
+      case "COPY_NO_PARAM_URL":
         this.writeClipBoard(tab.id, url);
 
         /* @__PURE__ */

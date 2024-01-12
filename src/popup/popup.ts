@@ -59,17 +59,17 @@ async function applyActinonEvent() {
   };
 
   document.getElementById("copy-md-format")!.onclick = async () => {
-    Actions.copy(definedTab, "MD_FORMAT");
+    Actions.copy(definedTab, "COPY_MD_FORMAT");
     windowClose();
   };
 
   document.getElementById("copy-title")!.onclick = async () => {
-    Actions.copy(definedTab, "ONLY_TITLE");
+    Actions.copy(definedTab, "COPY_ONLY_TITLE");
     windowClose();
   };
 
   document.getElementById("rem-param-copy-url")!.onclick = async () => {
-    Actions.copy(definedTab, "ONLY_URL", true);
+    Actions.copy(definedTab, "COPY_NO_PARAM_URL", true);
     windowClose();
   };
 }

@@ -75,15 +75,15 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
         break;
 
       case "copy_md_format":
-        Actions.copy(definedTab, "MD_FORMAT");
+        Actions.copy(definedTab, "COPY_MD_FORMAT");
         break;
 
       case "copy_only_title":
-        Actions.copy(definedTab, "ONLY_TITLE");
+        Actions.copy(definedTab, "COPY_ONLY_TITLE");
         break;
 
       case "rem_param_copy_url":
-        Actions.copy(definedTab, "ONLY_URL", true);
+        Actions.copy(definedTab, "COPY_NO_PARAM_URL", true);
         break;
 
       default:
