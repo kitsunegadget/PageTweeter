@@ -3,8 +3,4 @@
  * tabを渡す度に存在を確認する必要がでてくる。
  * これを無くすため、取得したタイミングで必要なプロパティを定義できる型をつくる
  */
-type DefinedTab = {
-  id: number;
-  url: string;
-  title: string;
-};
+type DefinedTab = Required<Pick<chrome.tabs.Tab, "id" | "url" | "title">>;
