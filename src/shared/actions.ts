@@ -208,7 +208,7 @@ export const Actions = {
 
     // popupではクリック後に閉じるため処理できないので、
     // バックグラウンドにメッセージングして譲る
-    if (self.toString() === "[object Window]") {
+    if (globalThis.document) {
       try {
         await chrome.runtime.sendMessage<NotifyClearMessage>({
           type: "notify_clear",
