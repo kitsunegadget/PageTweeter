@@ -95,13 +95,12 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
 });
 
 //========================||
-// clearNotify from pupup \/
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.type === "clearNotify") {
-    setTimeout(() => {
-      chrome.notifications.clear(message.id);
-    }, 6500);
-
-    sendResponse("clearNotify ok");
+// clearNotify from popup \/
+chrome.runtime.onMessage.addListener(
+  (message: ReceiveMessage, _, sendResponse) => {
+    if (message.type === "notify_clear") {
+      Actions.notifyClear(message.id);
+      sendResponse("notify_clear ok");
+    }
   }
-});
+);

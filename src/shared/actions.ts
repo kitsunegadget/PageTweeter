@@ -206,21 +206,28 @@ export const Actions = {
       });
     }
 
-    // popupではクリック後に閉じるため処理できないので、サービスワーカーに
-    // メッセージングして譲る
+    // popupではクリック後に閉じるため処理できないので、
+    // バックグラウンドにメッセージングして譲る
     if (self.toString() === "[object Window]") {
       try {
-        await chrome.runtime.sendMessage({
-          type: "clearNotify",
+        await chrome.runtime.sendMessage<NotifyClearMessage>({
+          type: "notify_clear",
           id: id,
         });
       } catch (err) {
-        throw new Error(err as string);
+        throw new Error(String(err));
       }
     } else {
-      setTimeout(() => {
-        chrome.notifications.clear(id);
-      }, 6500);
+      this.notifyClear(id);
     }
+  },
+
+  /**
+   * Clear a notification window from id.
+   */
+  notifyClear(id: string) {
+    setTimeout(() => {
+      chrome.notifications.clear(id);
+    }, 6500);
   },
 };
