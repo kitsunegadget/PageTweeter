@@ -192,10 +192,12 @@ export const Actions = {
    * @param {number} type
    */
   async notifyError(type: number) {
-    const id = `PageTweeter${(1000 + Math.random() * 8999).toFixed()}`;
+    const id = "PageTweeterNotification";
 
     /* @__PURE__ */
     console.log(id);
+
+    chrome.notifications.clear(id);
 
     if (type === 0) {
       chrome.notifications.create(id, {
@@ -203,31 +205,8 @@ export const Actions = {
         message: chrome.i18n.getMessage("error_text_0"),
         iconUrl: chrome.runtime.getURL("PTicon.png"),
         type: "basic",
+        requireInteraction: true,
       });
     }
-
-    // popupではクリック後に閉じるため処理できないので、
-    // バックグラウンドにメッセージングして譲る
-    if (globalThis.document) {
-      try {
-        await chrome.runtime.sendMessage<NotifyClearMessage>({
-          type: "notify_clear",
-          id: id,
-        });
-      } catch (err) {
-        throw new Error(String(err));
-      }
-    } else {
-      this.notifyClear(id);
-    }
-  },
-
-  /**
-   * Clear a notification window from id.
-   */
-  notifyClear(id: string) {
-    setTimeout(() => {
-      chrome.notifications.clear(id);
-    }, 6500);
   },
 };

@@ -93,14 +93,3 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
     Actions.notifyError(0);
   }
 });
-
-//========================||
-// clearNotify from popup \/
-chrome.runtime.onMessage.addListener(
-  (message: ReceiveMessage, _, sendResponse) => {
-    if (message.type === "notify_clear") {
-      Actions.notifyClear(message.id);
-      sendResponse("notify_clear ok");
-    }
-  }
-);
