@@ -19,5 +19,8 @@
   },
   "error_text_0": {
     "message": "Unavailable on this page"
+  },
+  "error_text_1": {
+    "message": "Copy failed"
   }
 }

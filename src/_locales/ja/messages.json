@@ -19,5 +19,8 @@
   },
   "error_text_0": {
     "message": "このページでは利用できません"
+  },
+  "error_text_1": {
+    "message": "コピーに失敗しました"
   }
 }

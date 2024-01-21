@@ -182,7 +182,7 @@ export const Actions = {
         });
       }
     } catch (err) {
-      this.notifyError(0);
+      this.notifyError(1);
       console.info(err);
     }
   },
@@ -199,14 +199,30 @@ export const Actions = {
 
     chrome.notifications.clear(id);
 
-    if (type === 0) {
-      chrome.notifications.create(id, {
-        title: "Page Tweeter",
-        message: chrome.i18n.getMessage("error_text_0"),
-        iconUrl: chrome.runtime.getURL("PTicon.png"),
-        type: "basic",
-        requireInteraction: true,
-      });
+    const notifyOptions: chrome.notifications.NotificationOptions<true> = {
+      title: "Page Tweeter",
+      message: "",
+      iconUrl: chrome.runtime.getURL("PTicon.png"),
+      type: "basic",
+      requireInteraction: true,
+    };
+
+    switch (type) {
+      case 0: {
+        notifyOptions.message = chrome.i18n.getMessage("error_text_0");
+        notifyOptions.contextMessage = "[Error] Unavailable scheme";
+        break;
+      }
+      case 1: {
+        notifyOptions.message = chrome.i18n.getMessage("error_text_1");
+        notifyOptions.contextMessage = "[Error] Could not write to Clipboard";
+        break;
+      }
+      default: {
+        notifyOptions.message = chrome.i18n.getMessage("error_text_0");
+      }
     }
+
+    chrome.notifications.create(id, notifyOptions);
   },
 };
