@@ -66,7 +66,7 @@ export const Actions = {
    */
   async createTweetWindow(tab: DefinedTab) {
     if (!this.checkUrlScheme(tab.url)) {
-      this.notifyError(0);
+      await this.notifyError(0);
       return;
     }
 
@@ -182,7 +182,7 @@ export const Actions = {
         });
       }
     } catch (err) {
-      this.notifyError(1);
+      await this.notifyError(1);
       console.info(err);
     }
   },
@@ -226,6 +226,6 @@ export const Actions = {
       }
     }
 
-    chrome.notifications.create(id, notifyOptions);
+    await chrome.notifications.create(id, notifyOptions);
   },
 };
