@@ -21,27 +21,27 @@ interface ActionListProps {
 const ActionInfos: Readonly<ActionInfo>[] = [
   {
     actionType: "TWEET",
-    text: chrome.i18n.getMessage("tweet_page_text"),
+    text: chrome.i18n.getMessage<I18nMessageType>("text_tweet_page"),
     iconSrc: "./images/Twitter social icons - circle - blue.svg",
   },
   {
     actionType: "COPY",
-    text: chrome.i18n.getMessage("clipboard_text"),
+    text: chrome.i18n.getMessage<I18nMessageType>("text_copy"),
     iconSrc: "./images/content_copy_FILL0_wght400_GRAD0_opsz48.svg",
   },
   {
     actionType: "COPY_MD_FORMAT",
-    text: chrome.i18n.getMessage("clipboard_md_format_text"),
+    text: chrome.i18n.getMessage<I18nMessageType>("text_copy_md_format"),
     iconSrc: "./images/content_copy_FILL0_wght400_GRAD0_opsz48.svg",
   },
   {
     actionType: "COPY_ONLY_TITLE",
-    text: chrome.i18n.getMessage("clipboard_title_only_text"),
+    text: chrome.i18n.getMessage<I18nMessageType>("text_copy_only_title"),
     iconSrc: "./images/title_FILL0_wght400_GRAD0_opsz48.svg",
   },
   {
     actionType: "COPY_NO_PARAM_URL",
-    text: chrome.i18n.getMessage("rem_param_copy_url"),
+    text: chrome.i18n.getMessage<I18nMessageType>("text_copy_no_param_url"),
     iconSrc: "./images/content_copy_FILL0_wght400_GRAD0_opsz48.svg",
   },
 ];

@@ -1,6 +1,18 @@
 import esbuild from "esbuild";
 import { copy } from "esbuild-plugin-copy";
 import { clean } from "esbuild-plugin-clean";
+import { outLocaleMessages } from "./src/_locales/localesOut.js";
+
+const preProcess = (processCallback) => {
+  return {
+    name: "pre-process",
+    setup({ onStart: registerOnStartCallback }) {
+      registerOnStartCallback(() => {
+        processCallback();
+      });
+    },
+  };
+};
 
 const args = process.argv.slice(2);
 const settings = {
@@ -36,12 +48,10 @@ const settings = {
           from: ["./src/popup/images/*"],
           to: ["./popup/images/images"],
         },
-        {
-          from: ["./src/_locales/**/*"],
-          to: ["./_locales"],
-          keepStructure: true,
-        },
       ],
+    }),
+    preProcess(() => {
+      outLocaleMessages("dist");
     }),
   ],
 };

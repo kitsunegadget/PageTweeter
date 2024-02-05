@@ -209,17 +209,20 @@ export const Actions = {
 
     switch (type) {
       case 0: {
-        notifyOptions.message = chrome.i18n.getMessage("error_text_0");
+        notifyOptions.message =
+          chrome.i18n.getMessage<I18nMessageType>("error_0");
         notifyOptions.contextMessage = "[Error] Unavailable scheme";
         break;
       }
       case 1: {
-        notifyOptions.message = chrome.i18n.getMessage("error_text_1");
+        notifyOptions.message =
+          chrome.i18n.getMessage<I18nMessageType>("error_1");
         notifyOptions.contextMessage = "[Error] Could not write to Clipboard";
         break;
       }
       default: {
-        notifyOptions.message = chrome.i18n.getMessage("error_text_0");
+        notifyOptions.message =
+          chrome.i18n.getMessage<I18nMessageType>("error_0");
       }
     }
 

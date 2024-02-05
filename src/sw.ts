@@ -5,27 +5,27 @@ import { Actions } from "./shared/actions";
 chrome.runtime.onInstalled.addListener(() => {
   chrome.contextMenus.create({
     id: "tweet_page",
-    title: chrome.i18n.getMessage("tweet_page_text"),
+    title: chrome.i18n.getMessage<I18nMessageType>("text_tweet_page"),
   });
 
   chrome.contextMenus.create({
     id: "copy_clip",
-    title: chrome.i18n.getMessage("clipboard_text"),
+    title: chrome.i18n.getMessage<I18nMessageType>("text_copy"),
   });
 
   chrome.contextMenus.create({
     id: "copy_md_format",
-    title: chrome.i18n.getMessage("clipboard_md_format_text"),
+    title: chrome.i18n.getMessage<I18nMessageType>("text_copy_md_format"),
   });
 
   chrome.contextMenus.create({
     id: "copy_only_title",
-    title: chrome.i18n.getMessage("clipboard_title_only_text"),
+    title: chrome.i18n.getMessage<I18nMessageType>("text_copy_only_title"),
   });
 
   chrome.contextMenus.create({
     id: "rem_param_copy_url",
-    title: chrome.i18n.getMessage("rem_param_copy_url"),
+    title: chrome.i18n.getMessage<I18nMessageType>("text_copy_no_param_url"),
   });
 
   // 子要素
