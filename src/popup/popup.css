@@ -1,0 +1,46 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #fff;
+  font-size: 85%;
+}
+
+#action-section {
+  width: 200px;
+}
+
+.action-list {
+  display: block;
+  list-style-type: none;
+
+  & li {
+    border-bottom: 1px solid #ccc;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    & a {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      margin: 0px;
+      padding: 0.2em;
+      text-decoration: none;
+      line-height: 24px;
+      color: #000;
+
+      & span {
+        padding-left: 5px;
+      }
+
+      &:hover {
+        background: #6682a1;
+        color: #fff;
+      }
+    }
+  }
+}

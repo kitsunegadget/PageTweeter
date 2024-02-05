@@ -4,7 +4,7 @@ import { clean } from "esbuild-plugin-clean";
 
 const args = process.argv.slice(2);
 const settings = {
-  entryPoints: ["src/sw.ts", "src/popup/popup.ts"],
+  entryPoints: ["src/sw.ts", "src/popup/popup.tsx"],
   bundle: true,
   outdir: "dist",
   outbase: "src",
