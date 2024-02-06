@@ -3,28 +3,28 @@ import { Actions } from "./shared/actions";
 //===================||
 // onInstalled event \/
 chrome.runtime.onInstalled.addListener(() => {
-  chrome.contextMenus.create({
-    id: "tweet_page",
+  chrome.contextMenus.create<ActionType>({
+    id: "TWEET",
     title: chrome.i18n.getMessage<I18nMessageType>("text_tweet_page"),
   });
 
-  chrome.contextMenus.create({
-    id: "copy_clip",
+  chrome.contextMenus.create<ActionType>({
+    id: "COPY",
     title: chrome.i18n.getMessage<I18nMessageType>("text_copy"),
   });
 
-  chrome.contextMenus.create({
-    id: "copy_md_format",
+  chrome.contextMenus.create<ActionType>({
+    id: "COPY_MD_FORMAT",
     title: chrome.i18n.getMessage<I18nMessageType>("text_copy_md_format"),
   });
 
-  chrome.contextMenus.create({
-    id: "copy_only_title",
+  chrome.contextMenus.create<ActionType>({
+    id: "COPY_ONLY_TITLE",
     title: chrome.i18n.getMessage<I18nMessageType>("text_copy_only_title"),
   });
 
-  chrome.contextMenus.create({
-    id: "rem_param_copy_url",
+  chrome.contextMenus.create<ActionType>({
+    id: "COPY_NO_PARAM_URL",
     title: chrome.i18n.getMessage<I18nMessageType>("text_copy_no_param_url"),
   });
 
@@ -66,24 +66,24 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
       title: tab.title ?? "",
     };
 
-    switch (info.menuItemId) {
-      case "tweet_page":
+    switch (info.menuItemId as ActionType) {
+      case "TWEET":
         Actions.createTweetWindow(definedTab);
         break;
 
-      case "copy_clip":
+      case "COPY":
         Actions.copy(definedTab, "COPY");
         break;
 
-      case "copy_md_format":
+      case "COPY_MD_FORMAT":
         Actions.copy(definedTab, "COPY_MD_FORMAT");
         break;
 
-      case "copy_only_title":
+      case "COPY_ONLY_TITLE":
         Actions.copy(definedTab, "COPY_ONLY_TITLE");
         break;
 
-      case "rem_param_copy_url":
+      case "COPY_NO_PARAM_URL":
         Actions.copy(definedTab, "COPY_NO_PARAM_URL", true);
         break;
 
