@@ -25,8 +25,8 @@ declare namespace chrome.i18n {
    * @param messageName The name of the message, as specified in the messages.json file.
    * @param substitutions Optional. Up to 9 substitution strings, if the message requires any.
    */
-  export function getMessage<T extends I18nMessageType>(
-    messageName: keyof I18nMessageType,
+  export function getMessage<T>(
+    messageName: keyof T,
     substitutions?: string | string[]
   ): string;
 }
