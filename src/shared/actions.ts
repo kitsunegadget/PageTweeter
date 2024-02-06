@@ -61,6 +61,46 @@ export const Actions = {
   },
 
   /**
+   * Limiting text length to 140.
+   * @param text An original text.
+   * @returns A processed text.
+   */
+  tweetLimiter(text: string): string {
+    const tcoLength = 13 + 10; // t.co の短縮URLの長さ https:// t.co / [10文字]
+    // 文字後にある半角スペース１個までは、文字数にカウントされない
+    const wordMatches = text.match(/\s*\S+\s{0,1}/g) ?? [];
+    const spaceLength = wordMatches.length - 1;
+    const allLength = text.length + tcoLength - spaceLength;
+
+    if (allLength > 140) {
+      let isSliced = false;
+      const limitLength = 140 - (tcoLength + 3);
+
+      const slicedText = wordMatches.reduce((acc, current, index) => {
+        if (isSliced) {
+          return acc;
+        }
+
+        const length = acc.length + current.length - (index + 1);
+
+        if (length > limitLength) {
+          const removeLength = length - limitLength;
+          const slicedCurrent = current.slice(0, -removeLength) + "...";
+          isSliced = true;
+
+          return acc + slicedCurrent;
+        } else {
+          return acc + current;
+        }
+      });
+
+      return slicedText;
+    } else {
+      return text;
+    }
+  },
+
+  /**
    * Create tweet window.
    * @param {DefinedTab} tab
    */
@@ -83,15 +123,11 @@ export const Actions = {
     /* @__PURE__ */
     console.log(await this.screenWidth, await this.screenHeight);
 
-    // 文字数制限
-    const shortenTitle =
-      tab.title.length + 48 > 140
-        ? tab.title.slice(0, 140 - 48) + "..."
-        : tab.title;
+    const slicedTitle = this.tweetLimiter(tab.title);
 
     // URL 作成
     const intentURL = new URL("https://twitter.com/intent/tweet");
-    intentURL.searchParams.set("text", shortenTitle);
+    intentURL.searchParams.set("text", slicedTitle);
     intentURL.searchParams.set("url", tab.url);
     intentURL.searchParams.set(
       "related",
