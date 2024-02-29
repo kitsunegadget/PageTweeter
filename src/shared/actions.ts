@@ -1,3 +1,5 @@
+type OgpProp = "title" | "url";
+
 export const Actions = {
   /**
    * tweetウィンドウ用のオプション
@@ -49,6 +51,35 @@ export const Actions = {
    */
   checkUrlScheme(url: string): boolean {
     return /^http(s|):\/\/.+?\/.*/g.test(url);
+  },
+
+  /**
+   * Get OGP content if the site has OGP meta tag.
+   * @param ogpProp OGP property name to retrieve.
+   * @param tabId Scripting tab id.
+   * @returns An OGP content or null.
+   */
+  async getOgpContent(ogpProp: OgpProp, tabId: number): Promise<string | null> {
+    const injectionResult = await chrome.scripting
+      .executeScript({
+        target: { tabId: tabId },
+        args: [{ ogpProp }],
+        func: (args) => {
+          const ogpContent = document.head
+            .querySelector(`meta[property="og:${args.ogpProp}"]`)
+            ?.getAttribute("content");
+          return ogpContent;
+        },
+      })
+      .catch((err) => {
+        console.info(err);
+      });
+
+    if (injectionResult) {
+      return injectionResult[0].result; // not found to null
+    }
+
+    return null;
   },
 
   /**
@@ -123,12 +154,17 @@ export const Actions = {
     /* @__PURE__ */
     console.log(await this.screenWidth, await this.screenHeight);
 
-    const slicedTitle = this.tweetLimiter(tab.title);
+    const ogTitle = await this.getOgpContent("title", tab.id);
+    const ogUrl = await this.getOgpContent("url", tab.id);
+    const slicedTitle = ogTitle
+      ? this.tweetLimiter(ogTitle)
+      : this.tweetLimiter(tab.title);
+    const newUrl = ogUrl ? ogUrl : tab.url;
 
     // URL 作成
     const intentURL = new URL("https://twitter.com/intent/tweet");
     intentURL.searchParams.set("text", slicedTitle);
-    intentURL.searchParams.set("url", tab.url);
+    intentURL.searchParams.set("url", newUrl);
     intentURL.searchParams.set(
       "related",
       "kitsunegadget:PageTweeter created by"
@@ -163,25 +199,32 @@ export const Actions = {
       return;
     }
 
-    const url = remParam ? this.removeParameter(tab.url) : tab.url;
+    const ogTitle = await this.getOgpContent("title", tab.id);
+    const ogUrl = await this.getOgpContent("url", tab.id);
+    const newTitle = ogTitle ? ogTitle : tab.title;
+    const newUrl = ogUrl ? ogUrl : tab.url;
+
+    // og が含まれる場合、remParamを通す必要はない
+    const url =
+      ogUrl == null && remParam ? this.removeParameter(newUrl) : newUrl;
 
     switch (actionType) {
       case "COPY": {
-        this.writeClipBoard(tab.id!, `${tab.title} ${url}`);
+        this.writeClipBoard(tab.id!, `${newTitle} ${url}`);
 
         /* @__PURE__ */
         console.log("PageTweeter: Copy to ClipBoard!");
         break;
       }
       case "COPY_MD_FORMAT":
-        this.writeClipBoard(tab.id, `[${tab.title}](${url})`);
+        this.writeClipBoard(tab.id, `[${newTitle}](${url})`);
 
         /* @__PURE__ */
         console.log("PageTweeter: Copy to ClipBoard! MarkDown style.");
         break;
 
       case "COPY_ONLY_TITLE":
-        this.writeClipBoard(tab.id, tab.title);
+        this.writeClipBoard(tab.id, newTitle);
 
         /* @__PURE__ */
         console.log("PageTweeter: Copy to ClipBoard! only Title.");
