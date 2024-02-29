@@ -6,6 +6,7 @@ declare type LocaleAreas<T> = {
 declare type I18nMessageType = {
   extension_description: LocaleAreas<string>;
   text_tweet_page: LocaleAreas<string>;
+  text_share_bsky: LocaleAreas<string>;
   text_copy: LocaleAreas<string>;
   text_copy_md_format: LocaleAreas<string>;
   text_copy_only_title: LocaleAreas<string>;

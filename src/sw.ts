@@ -9,6 +9,11 @@ chrome.runtime.onInstalled.addListener(() => {
   });
 
   chrome.contextMenus.create<ActionType>({
+    id: "BSKY",
+    title: "Blueskyで共有",
+  });
+
+  chrome.contextMenus.create<ActionType>({
     id: "COPY",
     title: chrome.i18n.getMessage<I18nMessageType>("text_copy"),
   });
@@ -69,6 +74,10 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
     switch (info.menuItemId as ActionType) {
       case "TWEET":
         Actions.createTweetWindow(definedTab);
+        break;
+
+      case "BSKY":
+        Actions.createBskyWindow(definedTab);
         break;
 
       case "COPY":

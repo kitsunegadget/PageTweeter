@@ -131,6 +131,29 @@ export const Actions = {
     }
   },
 
+  async createBskyWindow(tab: DefinedTab) {
+    if (!this.checkUrlScheme(tab.url)) {
+      await this.notifyError(0);
+      return;
+    }
+
+    const ogTitle = await this.getOgpContent("title", tab.id);
+    const ogUrl = await this.getOgpContent("url", tab.id);
+    const newTitle = ogTitle ? ogTitle : tab.title;
+    const newUrl = ogUrl ? ogUrl : tab.url;
+
+    const intentURL = new URL("https://bsky.app/intent/compose");
+    intentURL.searchParams.set("text", `${newTitle} ${newUrl}`);
+
+    chrome.tabs.create({
+      url: intentURL.toString(),
+      index: tab.index + 1,
+    });
+
+    /* @__PURE__ */
+    console.log("PageTweeter: Create bsky Window!");
+  },
+
   /**
    * Create tweet window.
    * @param {DefinedTab} tab

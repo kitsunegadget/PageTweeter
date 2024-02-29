@@ -25,6 +25,11 @@ const ActionInfos: Readonly<ActionInfo>[] = [
     iconSrc: "./images/Twitter social icons - circle - blue.svg",
   },
   {
+    actionType: "BSKY",
+    text: chrome.i18n.getMessage<I18nMessageType>("text_share_bsky"),
+    iconSrc: "./images/bluesky-1.svg",
+  },
+  {
     actionType: "COPY",
     text: chrome.i18n.getMessage<I18nMessageType>("text_copy"),
     iconSrc: "./images/content_copy_FILL0_wght400_GRAD0_opsz48.svg",
@@ -69,6 +74,10 @@ function ActionList({ actionInfos }: ActionListProps) {
     switch (actionType) {
       case "TWEET": {
         await Actions.createTweetWindow(tab);
+        break;
+      }
+      case "BSKY": {
+        await Actions.createBskyWindow(tab);
         break;
       }
       case "COPY_NO_PARAM_URL": {

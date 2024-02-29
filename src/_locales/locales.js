@@ -8,6 +8,11 @@ export const i18nMessages = {
     en: "Tweet this page",
     ja: "このページをツイート",
   },
+  text_share_bsky: {
+    en: "Share this page on Bluesky",
+    ja: "Blueskyで共有",
+  },
+
   text_copy: {
     en: "Copy title and link",
     ja: "タイトルとリンクのコピー",
