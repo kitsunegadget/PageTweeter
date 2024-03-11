@@ -7,6 +7,7 @@ type ActionInfo = {
   actionType: ActionType;
   text: string;
   iconSrc: string;
+  iconSize?: number;
 };
 
 interface ActionItemProps {
@@ -52,9 +53,12 @@ const ActionInfos: Readonly<ActionInfo>[] = [
 ];
 
 function ActionItem({ item, handleClick }: ActionItemProps) {
+  const iconSize = item.iconSize ?? 24;
   return (
     <a href="#" onClick={() => handleClick(item.actionType)}>
-      <img src={item.iconSrc} width="24" height="24" />
+      <div>
+        <img src={item.iconSrc} width={iconSize} height={iconSize} />
+      </div>
       <span>{item.text}</span>
     </a>
   );
