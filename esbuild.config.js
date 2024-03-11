@@ -38,15 +38,15 @@ const settings = {
       assets: [
         {
           from: ["./src/manifest.json", "./src/PTicon.png"],
-          to: ["./dist"],
+          to: ["./"],
         },
         {
           from: ["./src/popup/popup.html"],
-          to: ["./popup/popup"],
+          to: ["./popup"],
         },
         {
           from: ["./src/popup/images/*"],
-          to: ["./popup/images/images"],
+          to: ["./popup/images"],
         },
       ],
     }),
