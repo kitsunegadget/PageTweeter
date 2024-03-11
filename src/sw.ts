@@ -60,6 +60,7 @@ chrome.runtime.onInstalled.addListener(() => {
 chrome.contextMenus.onClicked.addListener((info, tab) => {
   if (tab) {
     const definedTab: DefinedTab = {
+      ...tab,
       id: tab.id ?? 0,
       url: tab.url ?? "",
       title: tab.title ?? "",
