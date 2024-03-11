@@ -9,7 +9,7 @@ body {
 }
 
 #action-section {
-  width: 200px;
+  width: max-content;
 }
 
 .action-list {
@@ -27,19 +27,27 @@ body {
       display: flex;
       align-items: center;
       width: 100%;
-      margin: 0px;
-      padding: 0.2em;
+      min-height: 24px;
+      margin-right: 8px;
       text-decoration: none;
-      line-height: 24px;
       color: #000;
 
       & span {
-        padding-left: 5px;
+        padding: 0.2rem 0;
       }
 
       &:hover {
-        background: #6682a1;
+        background: #4a5761;
         color: #fff;
+      }
+
+      > div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 4px;
+        min-width: 24px;
+        min-height: 24px;
       }
     }
   }
