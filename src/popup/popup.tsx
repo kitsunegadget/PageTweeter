@@ -84,8 +84,13 @@ function ActionList({ actionInfos }: ActionListProps) {
         await Actions.copy(tab, actionType, true);
         break;
       }
-      default: {
+      case "COPY":
+      case "COPY_MD_FORMAT":
+      case "COPY_ONLY_TITLE": {
         await Actions.copy(tab, actionType);
+        break;
+      }
+      default: {
       }
     }
     isTabLoadingRef.current = false;

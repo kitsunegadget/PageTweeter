@@ -209,12 +209,12 @@ export const Actions = {
   /**
    * Copy to string.
    * @param {DefinedTab} tab A copy url from tab.
-   * @param {ActionType} actionType An action type.
+   * @param {ActionType} copyType An action type.
    * @param {boolean} remParam Flag to remove parameter.
    */
   async copy(
     tab: DefinedTab,
-    actionType: ActionType = "COPY",
+    copyType: CopyType = "COPY",
     remParam: boolean = false
   ) {
     if (!this.checkUrlScheme(tab.url)) {
@@ -231,7 +231,7 @@ export const Actions = {
     const url =
       ogUrl == null && remParam ? this.removeParameter(newUrl) : newUrl;
 
-    switch (actionType) {
+    switch (copyType) {
       case "COPY": {
         this.writeClipBoard(tab.id!, `${newTitle} ${url}`);
 
