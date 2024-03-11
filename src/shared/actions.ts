@@ -45,6 +45,25 @@ export const Actions = {
   },
 
   /**
+   * ウィンドウ表示位置設定
+   * @param width the window width.
+   * @param height the window height.
+   */
+  async setWindowPosition(
+    width: number,
+    height: number
+  ): Promise<{ top: number; left: number }> {
+    const left = Math.round((await this.screenWidth) / 2 - width / 2);
+    let top = 0;
+
+    if ((await this.screenHeight) > height) {
+      top = Math.round((await this.screenHeight) / 2 - height / 2);
+    }
+
+    return { top, left };
+  },
+
+  /**
    * スキームのチェック
    * @param {string} url A URL string.
    * @returns {boolean} Only "http" or "https" scheme is true.
@@ -164,15 +183,9 @@ export const Actions = {
       return;
     }
 
-    // 表示位置設定
     const width = 550;
     const height = 570;
-    const left = Math.round((await this.screenWidth) / 2 - width / 2);
-    let top = 0;
-
-    if ((await this.screenHeight) > height) {
-      top = Math.round((await this.screenHeight) / 2 - height / 2);
-    }
+    const { left, top } = await this.setWindowPosition(width, height);
 
     /* @__PURE__ */
     console.log(await this.screenWidth, await this.screenHeight);
@@ -216,15 +229,9 @@ export const Actions = {
       return;
     }
 
-    // 表示位置設定
     const width = 550;
     const height = 570;
-    const left = Math.round((await this.screenWidth) / 2 - width / 2);
-    let top = 0;
-
-    if ((await this.screenHeight) > height) {
-      top = Math.round((await this.screenHeight) / 2 - height / 2);
-    }
+    const { left, top } = await this.setWindowPosition(width, height);
 
     /* @__PURE__ */
     console.log(await this.screenWidth, await this.screenHeight);
