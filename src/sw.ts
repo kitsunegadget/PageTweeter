@@ -3,44 +3,56 @@ import { Actions } from "./shared/actions";
 //===================||
 // onInstalled event \/
 chrome.runtime.onInstalled.addListener(() => {
-  chrome.contextMenus.create<ActionType>({
-    id: "TWEET",
-    title: chrome.i18n.getMessage<I18nMessageType>("text_tweet_page"),
-  });
-
-  chrome.contextMenus.create<ActionType>({
-    id: "BSKY",
-    title: "Blueskyで共有",
+  chrome.contextMenus.create({
+    id: "SNS",
+    title: chrome.i18n.getMessage<I18nMessageType>("contextmenu_sns"),
   });
 
   chrome.contextMenus.create<ActionType>({
     id: "COPY",
-    title: chrome.i18n.getMessage<I18nMessageType>("text_copy"),
+    title: chrome.i18n.getMessage<I18nMessageType>("copy"),
   });
-
   chrome.contextMenus.create<ActionType>({
     id: "COPY_MD_FORMAT",
-    title: chrome.i18n.getMessage<I18nMessageType>("text_copy_md_format"),
+    title: chrome.i18n.getMessage<I18nMessageType>("copy_md_format"),
   });
-
   chrome.contextMenus.create<ActionType>({
     id: "COPY_ONLY_TITLE",
-    title: chrome.i18n.getMessage<I18nMessageType>("text_copy_only_title"),
+    title: chrome.i18n.getMessage<I18nMessageType>("copy_only_title"),
   });
-
   chrome.contextMenus.create<ActionType>({
     id: "COPY_NO_PARAM_URL",
-    title: chrome.i18n.getMessage<I18nMessageType>("text_copy_no_param_url"),
+    title: chrome.i18n.getMessage<I18nMessageType>("copy_no_param_url"),
   });
 
   // 子要素
-  // chrome.contextMenus.create({
-  //   id: "rem_param_copy_url",
-  //   parentId: "rem_param",
-  //   title: chrome.i18n.getMessage("rem_param_copy_url"),
-  // });
+  chrome.contextMenus.create<ActionType>({
+    id: "TWEET",
+    parentId: "SNS",
+    title: chrome.i18n.getMessage<I18nMessageType>("share_twitter"),
+  });
+  chrome.contextMenus.create<ActionType>({
+    id: "BSKY",
+    parentId: "SNS",
+    title: chrome.i18n.getMessage<I18nMessageType>("share_bsky"),
+  });
+  chrome.contextMenus.create<ActionType>({
+    id: "FACEBOOK",
+    parentId: "SNS",
+    title: chrome.i18n.getMessage<I18nMessageType>("share_facebook"),
+  });
+  chrome.contextMenus.create<ActionType>({
+    id: "HATENA",
+    parentId: "SNS",
+    title: chrome.i18n.getMessage<I18nMessageType>("share_hatena"),
+  });
+  chrome.contextMenus.create<ActionType>({
+    id: "NOTE",
+    parentId: "SNS",
+    title: chrome.i18n.getMessage<I18nMessageType>("share_note"),
+  });
 
-  // declartiveContent
+  // declarativeContent
   chrome.declarativeContent.onPageChanged.removeRules(undefined, () => {
     chrome.action.disable();
 
@@ -78,6 +90,18 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
 
       case "BSKY":
         Actions.createBskyWindow(definedTab);
+        break;
+
+      case "FACEBOOK":
+        Actions.createFacebookWindow(definedTab);
+        break;
+
+      case "HATENA":
+        Actions.createHatenaWindow(definedTab);
+        break;
+
+      case "NOTE":
+        Actions.createNoteWindow(definedTab);
         break;
 
       case "COPY":

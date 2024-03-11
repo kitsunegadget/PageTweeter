@@ -22,32 +22,49 @@ interface ActionListProps {
 const ActionInfos: Readonly<ActionInfo>[] = [
   {
     actionType: "TWEET",
-    text: chrome.i18n.getMessage<I18nMessageType>("text_tweet_page"),
+    text: chrome.i18n.getMessage<I18nMessageType>("share_twitter"),
     iconSrc: "./images/Twitter social icons - circle - blue.svg",
   },
   {
     actionType: "BSKY",
-    text: chrome.i18n.getMessage<I18nMessageType>("text_share_bsky"),
+    text: chrome.i18n.getMessage<I18nMessageType>("share_bsky"),
     iconSrc: "./images/bluesky-1.svg",
   },
   {
+    actionType: "FACEBOOK",
+    text: chrome.i18n.getMessage<I18nMessageType>("share_facebook"),
+    iconSrc: "./images/Facebook_Logo_Primary.png",
+    iconSize: 16,
+  },
+  {
+    actionType: "HATENA",
+    text: chrome.i18n.getMessage<I18nMessageType>("share_hatena"),
+    iconSrc: "./images/hatenabookmark_symbolmark.png",
+    iconSize: 20,
+  },
+  {
+    actionType: "NOTE",
+    text: chrome.i18n.getMessage<I18nMessageType>("share_note"),
+    iconSrc: "./images/note_icon.svg",
+  },
+  {
     actionType: "COPY",
-    text: chrome.i18n.getMessage<I18nMessageType>("text_copy"),
+    text: chrome.i18n.getMessage<I18nMessageType>("copy"),
     iconSrc: "./images/content_copy_FILL0_wght400_GRAD0_opsz48.svg",
   },
   {
     actionType: "COPY_MD_FORMAT",
-    text: chrome.i18n.getMessage<I18nMessageType>("text_copy_md_format"),
+    text: chrome.i18n.getMessage<I18nMessageType>("copy_md_format"),
     iconSrc: "./images/content_copy_FILL0_wght400_GRAD0_opsz48.svg",
   },
   {
     actionType: "COPY_ONLY_TITLE",
-    text: chrome.i18n.getMessage<I18nMessageType>("text_copy_only_title"),
+    text: chrome.i18n.getMessage<I18nMessageType>("copy_only_title"),
     iconSrc: "./images/title_FILL0_wght400_GRAD0_opsz48.svg",
   },
   {
     actionType: "COPY_NO_PARAM_URL",
-    text: chrome.i18n.getMessage<I18nMessageType>("text_copy_no_param_url"),
+    text: chrome.i18n.getMessage<I18nMessageType>("copy_no_param_url"),
     iconSrc: "./images/content_copy_FILL0_wght400_GRAD0_opsz48.svg",
   },
 ];
@@ -82,6 +99,18 @@ function ActionList({ actionInfos }: ActionListProps) {
       }
       case "BSKY": {
         await Actions.createBskyWindow(tab);
+        break;
+      }
+      case "FACEBOOK": {
+        await Actions.createFacebookWindow(tab);
+        break;
+      }
+      case "HATENA": {
+        await Actions.createHatenaWindow(tab);
+        break;
+      }
+      case "NOTE": {
+        await Actions.createNoteWindow(tab);
         break;
       }
       case "COPY_NO_PARAM_URL": {

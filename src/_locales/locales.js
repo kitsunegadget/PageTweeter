@@ -4,30 +4,47 @@ export const i18nMessages = {
     ja: "右クリックとアイコンからページをツイートできます。",
   },
 
-  text_tweet_page: {
-    en: "Tweet this page",
-    ja: "このページをツイート",
+  share_twitter: {
+    en: "Share this page on Twitter",
+    ja: "Twitterで共有",
   },
-  text_share_bsky: {
+  share_bsky: {
     en: "Share this page on Bluesky",
     ja: "Blueskyで共有",
   },
+  share_facebook: {
+    en: "Share this page on Facebook",
+    ja: "Facebookで共有",
+  },
+  share_hatena: {
+    en: "View this page on Hatena Bookmark",
+    ja: "はてなブックマークで見る",
+  },
+  share_note: {
+    en: "Write with note",
+    ja: "noteで書く",
+  },
 
-  text_copy: {
+  copy: {
     en: "Copy title and link",
     ja: "タイトルとリンクのコピー",
   },
-  text_copy_md_format: {
+  copy_md_format: {
     en: "Copy in Markdown format",
     ja: "マークダウン形式でコピー",
   },
-  text_copy_only_title: {
+  copy_only_title: {
     en: "Copy title only",
     ja: "タイトルのみコピー",
   },
-  text_copy_no_param_url: {
+  copy_no_param_url: {
     en: "Copy URL with parameters removed",
     ja: "パラメータを削除したURLのコピー",
+  },
+
+  contextmenu_sns: {
+    en: "Share on SNS",
+    ja: "SNS共有",
   },
 
   error_0: {

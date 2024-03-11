@@ -207,6 +207,104 @@ export const Actions = {
   },
 
   /**
+   * Create Facebook share window.
+   * @param {DefinedTab} tab
+   */
+  async createFacebookWindow(tab: DefinedTab) {
+    if (!this.checkUrlScheme(tab.url)) {
+      await this.notifyError(0);
+      return;
+    }
+
+    // 表示位置設定
+    const width = 550;
+    const height = 570;
+    const left = Math.round((await this.screenWidth) / 2 - width / 2);
+    let top = 0;
+
+    if ((await this.screenHeight) > height) {
+      top = Math.round((await this.screenHeight) / 2 - height / 2);
+    }
+
+    /* @__PURE__ */
+    console.log(await this.screenWidth, await this.screenHeight);
+
+    const ogTitle = await this.getOgpContent("title", tab.id);
+    const ogUrl = await this.getOgpContent("url", tab.id);
+    const newTitle = ogTitle ? ogTitle : tab.title;
+    const newUrl = ogUrl ? ogUrl : tab.url;
+
+    // URL 作成
+    const shareURL = new URL("https://www.facebook.com/sharer/sharer.php");
+    shareURL.searchParams.set("t", newTitle);
+    shareURL.searchParams.set("u", newUrl);
+
+    chrome.windows.create({
+      url: shareURL.toString(),
+      width: width,
+      height: height,
+      top: top,
+      left: left,
+      type: "popup",
+    });
+
+    /* @__PURE__ */
+    console.log("PageTweeter: Create Facebook Window!");
+  },
+
+  /**
+   * Create Hatena bookmark window.
+   * @param {DefinedTab} tab
+   */
+  async createHatenaWindow(tab: DefinedTab) {
+    if (!this.checkUrlScheme(tab.url)) {
+      await this.notifyError(0);
+      return;
+    }
+
+    const ogUrl = await this.getOgpContent("url", tab.id);
+    const newUrl = ogUrl ? ogUrl : tab.url;
+
+    // URL 作成
+    const shareURL = new URL("http://b.hatena.ne.jp/entry/");
+    shareURL.pathname += newUrl;
+
+    chrome.tabs.create({
+      url: shareURL.toString(),
+      index: tab.index + 1,
+    });
+
+    /* @__PURE__ */
+    console.log("PageTweeter: Create Hatena Window!");
+  },
+
+  /**
+   * Create NOTE window.
+   * @param {DefinedTab} tab
+   */
+  async createNoteWindow(tab: DefinedTab) {
+    if (!this.checkUrlScheme(tab.url)) {
+      await this.notifyError(0);
+      return;
+    }
+
+    const ogUrl = await this.getOgpContent("url", tab.id);
+    const newUrl = ogUrl ? ogUrl : tab.url;
+
+    // URL 作成
+    const shareURL = new URL("https://note.mu/intent/post");
+    shareURL.searchParams.set("url", newUrl);
+
+    chrome.tabs.create({
+      url: shareURL.toString(),
+      index: tab.index + 1,
+    });
+
+    /* @__PURE__ */
+    console.log("PageTweeter: Create NOTE Window!");
+  },
+
+  /**
    * Copy to string.
    * @param {DefinedTab} tab A copy url from tab.
    * @param {ActionType} copyType An action type.

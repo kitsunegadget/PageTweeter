@@ -5,12 +5,16 @@ declare type LocaleAreas<T> = {
 
 declare type I18nMessageType = {
   extension_description: LocaleAreas<string>;
-  text_tweet_page: LocaleAreas<string>;
-  text_share_bsky: LocaleAreas<string>;
-  text_copy: LocaleAreas<string>;
-  text_copy_md_format: LocaleAreas<string>;
-  text_copy_only_title: LocaleAreas<string>;
-  text_copy_no_param_url: LocaleAreas<string>;
+  share_twitter: LocaleAreas<string>;
+  share_bsky: LocaleAreas<string>;
+  share_facebook: LocaleAreas<string>;
+  share_hatena: LocaleAreas<string>;
+  share_note: LocaleAreas<string>;
+  copy: LocaleAreas<string>;
+  copy_md_format: LocaleAreas<string>;
+  copy_only_title: LocaleAreas<string>;
+  copy_no_param_url: LocaleAreas<string>;
+  contextmenu_sns: LocaleAreas<string>;
   error_0: LocaleAreas<string>;
   error_1: LocaleAreas<string>;
 };
