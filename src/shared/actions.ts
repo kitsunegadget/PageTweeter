@@ -399,7 +399,7 @@ export const Actions = {
    * @param {number} type
    */
   async notifyError(type: number) {
-    const id = "PageTweeterNotification";
+    const id = "SharelotsNotification";
 
     /* @__PURE__ */
     console.log(id);
@@ -407,9 +407,9 @@ export const Actions = {
     chrome.notifications.clear(id);
 
     const notifyOptions: chrome.notifications.NotificationOptions<true> = {
-      title: "Page Tweeter",
+      title: "Sharelots",
       message: "",
-      iconUrl: chrome.runtime.getURL("PTicon.png"),
+      iconUrl: chrome.runtime.getURL("icon.png"),
       type: "basic",
       requireInteraction: true,
     };

@@ -2,14 +2,14 @@ import fs from "node:fs";
 
 const manifest = {
   manifest_version: 3,
-  name: "Page Tweeter",
+  name: "Sharelots",
   version: "5.1",
   default_locale: "en",
   description: "__MSG_extension_description__",
   icons: {
-    16: "PTicon.png",
-    48: "PTicon.png",
-    128: "PTicon.png",
+    16: "icon.png",
+    48: "icon.png",
+    128: "icon.png",
   },
   author: "Yu, Kitsune Gadget",
   background:
@@ -20,7 +20,7 @@ const manifest = {
           type: "module",
         },
   action: {
-    default_title: "Page Tweeter",
+    default_title: "Sharelots",
     default_popup: "popup/popup.html",
   },
   permissions: [

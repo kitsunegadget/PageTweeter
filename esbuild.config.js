@@ -39,7 +39,7 @@ const settings = {
     copy({
       assets: [
         {
-          from: ["./src/PTicon.png"],
+          from: ["./src/icon.png"],
           to: ["./"],
         },
         {
