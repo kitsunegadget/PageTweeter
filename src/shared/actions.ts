@@ -323,7 +323,7 @@ export const Actions = {
     remParam: boolean = false
   ) {
     if (!this.checkUrlScheme(tab.url)) {
-      this.notifyError(0);
+      await this.notifyError(0);
       return;
     }
 
