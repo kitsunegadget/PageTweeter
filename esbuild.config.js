@@ -2,6 +2,7 @@ import esbuild from "esbuild";
 import { copy } from "esbuild-plugin-copy";
 import { clean } from "esbuild-plugin-clean";
 import { outLocaleMessages } from "./src/_locales/localesOut.js";
+import { createManifest } from "./src/manifest.js";
 
 const preProcess = (processCallback) => {
   return {
@@ -15,10 +16,11 @@ const preProcess = (processCallback) => {
 };
 
 const args = process.argv.slice(2);
+const outDir = args.includes("--firefox") ? "dist-firefox" : "dist";
 const settings = {
   entryPoints: ["src/sw.ts", "src/popup/popup.tsx"],
   bundle: true,
-  outdir: "dist",
+  outdir: outDir,
   outbase: "src",
   define: {
     "process.env": "{}",
@@ -33,11 +35,11 @@ const settings = {
   minify: args.includes("--production"),
   metafile: true,
   plugins: [
-    clean({ patterns: "./dist/*" }),
+    clean({ patterns: `./${outDir}/*` }),
     copy({
       assets: [
         {
-          from: ["./src/manifest.json", "./src/PTicon.png"],
+          from: ["./src/PTicon.png"],
           to: ["./"],
         },
         {
@@ -51,7 +53,8 @@ const settings = {
       ],
     }),
     preProcess(() => {
-      outLocaleMessages("dist");
+      outLocaleMessages(outDir);
+      createManifest(outDir);
     }),
   ],
 };

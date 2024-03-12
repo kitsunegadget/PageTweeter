@@ -10,7 +10,8 @@
     "prod": "webpack --mode production",
     "eswatch": "node esbuild.config.js --watch",
     "esdev": "node esbuild.config.js --development",
-    "esprod": "node esbuild.config.js --production"
+    "esprod": "node esbuild.config.js --production",
+    "esprod-firefox": "node esbuild.config.js --production --firefox"
   },
   "author": "Yu, kitsune Gadget",
   "private": "true",
