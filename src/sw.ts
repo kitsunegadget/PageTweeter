@@ -83,7 +83,8 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
       title: tab.title ?? "",
     };
 
-    switch (info.menuItemId as ActionType) {
+    const menuItemId = info.menuItemId as ActionType;
+    switch (menuItemId) {
       case "TWEET":
         Actions.createTweetWindow(definedTab);
         break;
@@ -121,7 +122,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
         break;
 
       default:
-        throw new Error("Error! case is not exist.");
+        throw new Error(menuItemId satisfies never);
     }
   } else {
     Actions.notifyError(0);

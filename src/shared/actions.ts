@@ -366,7 +366,7 @@ export const Actions = {
         break;
 
       default:
-        throw new Error("Error! case is not exist.");
+        throw new Error(copyType satisfies never);
     }
   },
 

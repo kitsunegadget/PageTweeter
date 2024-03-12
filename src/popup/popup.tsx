@@ -124,6 +124,7 @@ function ActionList({ actionInfos }: ActionListProps) {
         break;
       }
       default: {
+        throw new Error(actionType satisfies never);
       }
     }
     isTabLoadingRef.current = false;
