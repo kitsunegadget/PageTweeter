@@ -1,47 +1,26 @@
 type OgpProp = "title" | "url";
 
 export const Actions = {
-  /**
-   * tweetウィンドウ用のオプション
-   */
-  get windowOptions() {
-    return "scrollbars=yes,resizable=yes,toolbar=no,location=yes";
+  async getScreenHeight() {
+    if (Object.prototype.hasOwnProperty.call(globalThis, "screen")) {
+      return screen.height;
+    } else {
+      const displayInfo = await chrome.system.display.getInfo();
+      if (displayInfo) {
+        return displayInfo[0].bounds.height;
+      }
+    }
+    return 1920;
   },
 
-  /**
-   * スクリーン高さ
-   */
-  get screenHeight() {
-    const wrap = async () => {
-      if (globalThis.hasOwnProperty("screen")) {
-        return screen.height;
-      } else {
-        const displayInfo = await chrome.system.display.getInfo();
-        if (displayInfo) return displayInfo[0].bounds.height;
-
-        return 1920;
-      }
-    };
-
-    return wrap();
-  },
-
-  /**
-   * スクリーン幅
-   */
-  get screenWidth() {
-    const wrap = async () => {
-      if (globalThis.hasOwnProperty("screen")) {
-        return screen.width;
-      } else {
-        const displayInfo = await chrome.system.display.getInfo();
-        if (displayInfo) return displayInfo[0].bounds.width;
-
-        return 1080;
-      }
-    };
-
-    return wrap();
+  async getScreenWidth() {
+    if (Object.prototype.hasOwnProperty.call(globalThis, "screen")) {
+      return screen.width;
+    } else {
+      const displayInfo = await chrome.system.display.getInfo();
+      if (displayInfo) return displayInfo[0].bounds.width;
+    }
+    return 1080;
   },
 
   /**
@@ -49,16 +28,25 @@ export const Actions = {
    * @param width the window width.
    * @param height the window height.
    */
-  async setWindowPosition(
+  async calcWindowPosition(
     width: number,
     height: number
   ): Promise<{ top: number; left: number }> {
-    const left = Math.round((await this.screenWidth) / 2 - width / 2);
-    let top = 0;
+    const screenWidth = await this.getScreenWidth();
+    const screenHeight = await this.getScreenHeight();
 
-    if ((await this.screenHeight) > height) {
-      top = Math.round((await this.screenHeight) / 2 - height / 2);
+    let left = 0;
+    if (screenWidth > width) {
+      left = Math.round(screenWidth / 2 - width / 2);
     }
+
+    let top = 0;
+    if (screenHeight > height) {
+      top = Math.round(screenHeight / 2 - height / 2);
+    }
+
+    /* @__PURE__ */
+    console.log(screenWidth, screenHeight);
 
     return { top, left };
   },
@@ -90,12 +78,16 @@ export const Actions = {
           return ogpContent;
         },
       })
-      .catch((err) => {
-        console.info(err);
+      .catch((err: unknown) => {
+        if (err instanceof Error) {
+          console.info(err.message);
+        } else {
+          console.info(err);
+        }
       });
 
     if (injectionResult) {
-      return injectionResult[0].result; // not found to null
+      return injectionResult[0].result ?? null; // not found to null
     }
 
     return null;
@@ -150,21 +142,14 @@ export const Actions = {
     }
   },
 
-  async createBskyWindow(tab: DefinedTab) {
-    if (!this.checkUrlScheme(tab.url)) {
-      await this.notifyError(0);
-      return;
-    }
-
-    const ogTitle = await this.getOgpContent("title", tab.id);
-    const ogUrl = await this.getOgpContent("url", tab.id);
-    const newTitle = ogTitle ? ogTitle : tab.title;
-    const newUrl = ogUrl ? ogUrl : tab.url;
+  async createBskyTab(tab: DefinedTab) {
+    const newTitle = (await this.getOgpContent("title", tab.id)) ?? tab.title;
+    const newUrl = (await this.getOgpContent("url", tab.id)) ?? tab.url;
 
     const intentURL = new URL("https://bsky.app/intent/compose");
     intentURL.searchParams.set("text", `${newTitle} ${newUrl}`);
 
-    chrome.tabs.create({
+    await chrome.tabs.create({
       url: intentURL.toString(),
       index: tab.index + 1,
     });
@@ -178,35 +163,22 @@ export const Actions = {
    * @param {DefinedTab} tab
    */
   async createTweetWindow(tab: DefinedTab) {
-    if (!this.checkUrlScheme(tab.url)) {
-      await this.notifyError(0);
-      return;
-    }
-
     const width = 550;
     const height = 570;
-    const { left, top } = await this.setWindowPosition(width, height);
-
-    /* @__PURE__ */
-    console.log(await this.screenWidth, await this.screenHeight);
+    const { left, top } = await this.calcWindowPosition(width, height);
 
     const ogTitle = await this.getOgpContent("title", tab.id);
-    const ogUrl = await this.getOgpContent("url", tab.id);
     const slicedTitle = ogTitle
       ? this.tweetLimiter(ogTitle)
       : this.tweetLimiter(tab.title);
-    const newUrl = ogUrl ? ogUrl : tab.url;
+    const newUrl = (await this.getOgpContent("url", tab.id)) ?? tab.url;
 
-    // URL 作成
     const intentURL = new URL("https://twitter.com/intent/tweet");
     intentURL.searchParams.set("text", slicedTitle);
     intentURL.searchParams.set("url", newUrl);
-    intentURL.searchParams.set(
-      "related",
-      "kitsunegadget:PageTweeter created by"
-    );
+    // intentURL.searchParams.set("related", "kitsunegadget:Sharelots created by");
 
-    chrome.windows.create({
+    await chrome.windows.create({
       url: intentURL.toString(),
       width: width,
       height: height,
@@ -224,29 +196,19 @@ export const Actions = {
    * @param {DefinedTab} tab
    */
   async createFacebookWindow(tab: DefinedTab) {
-    if (!this.checkUrlScheme(tab.url)) {
-      await this.notifyError(0);
-      return;
-    }
-
     const width = 550;
     const height = 570;
-    const { left, top } = await this.setWindowPosition(width, height);
+    const { left, top } = await this.calcWindowPosition(width, height);
 
-    /* @__PURE__ */
-    console.log(await this.screenWidth, await this.screenHeight);
-
-    const ogTitle = await this.getOgpContent("title", tab.id);
-    const ogUrl = await this.getOgpContent("url", tab.id);
-    const newTitle = ogTitle ? ogTitle : tab.title;
-    const newUrl = ogUrl ? ogUrl : tab.url;
+    const newTitle = (await this.getOgpContent("title", tab.id)) ?? tab.title;
+    const newUrl = (await this.getOgpContent("url", tab.id)) ?? tab.url;
 
     // URL 作成
     const shareURL = new URL("https://www.facebook.com/sharer/sharer.php");
     shareURL.searchParams.set("t", newTitle);
     shareURL.searchParams.set("u", newUrl);
 
-    chrome.windows.create({
+    await chrome.windows.create({
       url: shareURL.toString(),
       width: width,
       height: height,
@@ -263,20 +225,12 @@ export const Actions = {
    * Create Hatena bookmark window.
    * @param {DefinedTab} tab
    */
-  async createHatenaWindow(tab: DefinedTab) {
-    if (!this.checkUrlScheme(tab.url)) {
-      await this.notifyError(0);
-      return;
-    }
-
-    const ogUrl = await this.getOgpContent("url", tab.id);
-    const newUrl = ogUrl ? ogUrl : tab.url;
-
-    // URL 作成
+  async createHatenaTab(tab: DefinedTab) {
+    const newUrl = (await this.getOgpContent("url", tab.id)) ?? tab.url;
     const shareURL = new URL("http://b.hatena.ne.jp/entry/");
     shareURL.pathname += newUrl;
 
-    chrome.tabs.create({
+    await chrome.tabs.create({
       url: shareURL.toString(),
       index: tab.index + 1,
     });
@@ -289,20 +243,12 @@ export const Actions = {
    * Create NOTE window.
    * @param {DefinedTab} tab
    */
-  async createNoteWindow(tab: DefinedTab) {
-    if (!this.checkUrlScheme(tab.url)) {
-      await this.notifyError(0);
-      return;
-    }
-
-    const ogUrl = await this.getOgpContent("url", tab.id);
-    const newUrl = ogUrl ? ogUrl : tab.url;
-
-    // URL 作成
+  async createNoteTab(tab: DefinedTab) {
+    const newUrl = (await this.getOgpContent("url", tab.id)) ?? tab.url;
     const shareURL = new URL("https://note.mu/intent/post");
     shareURL.searchParams.set("url", newUrl);
 
-    chrome.tabs.create({
+    await chrome.tabs.create({
       url: shareURL.toString(),
       index: tab.index + 1,
     });
@@ -322,14 +268,8 @@ export const Actions = {
     copyType: CopyType = "COPY",
     remParam: boolean = false
   ) {
-    if (!this.checkUrlScheme(tab.url)) {
-      await this.notifyError(0);
-      return;
-    }
-
-    const ogTitle = await this.getOgpContent("title", tab.id);
+    const newTitle = (await this.getOgpContent("title", tab.id)) ?? tab.title;
     const ogUrl = await this.getOgpContent("url", tab.id);
-    const newTitle = ogTitle ? ogTitle : tab.title;
     const newUrl = ogUrl ? ogUrl : tab.url;
 
     // og が含まれる場合、remParamを通す必要はない
@@ -338,28 +278,28 @@ export const Actions = {
 
     switch (copyType) {
       case "COPY": {
-        this.writeClipBoard(tab.id!, `${newTitle} ${url}`);
+        await this.writeClipBoard(tab.id, `${newTitle} ${url}`);
 
         /* @__PURE__ */
         console.log("PageTweeter: Copy to ClipBoard!");
         break;
       }
       case "COPY_MD_FORMAT":
-        this.writeClipBoard(tab.id, `[${newTitle}](${url})`);
+        await this.writeClipBoard(tab.id, `[${newTitle}](${url})`);
 
         /* @__PURE__ */
         console.log("PageTweeter: Copy to ClipBoard! MarkDown style.");
         break;
 
       case "COPY_ONLY_TITLE":
-        this.writeClipBoard(tab.id, newTitle);
+        await this.writeClipBoard(tab.id, newTitle);
 
         /* @__PURE__ */
         console.log("PageTweeter: Copy to ClipBoard! only Title.");
         break;
 
       case "COPY_NO_PARAM_URL":
-        this.writeClipBoard(tab.id, url);
+        await this.writeClipBoard(tab.id, url);
 
         /* @__PURE__ */
         console.log("PageTweeter: Copy to ClipBoard! only removed param URL.");
@@ -388,21 +328,25 @@ export const Actions = {
           },
         });
       }
-    } catch (err) {
-      await this.notifyError(1);
-      console.info(err);
+    } catch (err: unknown) {
+      await this.notifyError("COPY_FAILED");
+      if (err instanceof Error) {
+        console.error(err.message);
+      } else {
+        console.error(err);
+      }
     }
   },
 
   /**
    * Notify unavailable message.
-   * @param {number} type
+   * @param {number} errorType
    */
-  async notifyError(type: number) {
+  async notifyError(errorType: ErrorType) {
     const id = "SharelotsNotification";
 
     /* @__PURE__ */
-    console.log(id);
+    console.log(id, errorType);
 
     chrome.notifications.clear(id);
 
@@ -414,25 +358,30 @@ export const Actions = {
       requireInteraction: true,
     };
 
-    switch (type) {
-      case 0: {
+    switch (errorType) {
+      case "UNAVAILABLE_SCHEME": {
         notifyOptions.message =
-          chrome.i18n.getMessage<I18nMessageType>("error_0");
+          chrome.i18n.getMessage<I18nMessageType>("error_unavailable");
         notifyOptions.contextMessage = "[Error] Unavailable scheme";
         break;
       }
-      case 1: {
+      case "UNAVAILABLE_TAB": {
         notifyOptions.message =
-          chrome.i18n.getMessage<I18nMessageType>("error_1");
+          chrome.i18n.getMessage<I18nMessageType>("error_unavailable");
+        notifyOptions.contextMessage = "[Error] Unavailable tabs";
+        break;
+      }
+      case "COPY_FAILED": {
+        notifyOptions.message =
+          chrome.i18n.getMessage<I18nMessageType>("error_copy_failed");
         notifyOptions.contextMessage = "[Error] Could not write to Clipboard";
         break;
       }
       default: {
-        notifyOptions.message =
-          chrome.i18n.getMessage<I18nMessageType>("error_0");
+        throw new Error(errorType satisfies never);
       }
     }
-
+    // eslint-disable-next-line
     await chrome.notifications.create(id, notifyOptions);
   },
 };

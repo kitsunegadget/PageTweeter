@@ -15,6 +15,6 @@ declare type I18nMessageType = {
   copy_only_title: LocaleAreas<string>;
   copy_no_param_url: LocaleAreas<string>;
   contextmenu_sns: LocaleAreas<string>;
-  error_0: LocaleAreas<string>;
-  error_1: LocaleAreas<string>;
+  error_unavailable: LocaleAreas<string>;
+  error_copy_failed: LocaleAreas<string>;
 };

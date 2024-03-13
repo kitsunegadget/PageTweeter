@@ -12,7 +12,7 @@ type ActionInfo = {
 
 interface ActionItemProps {
   item: Readonly<ActionInfo>;
-  handleClick: Function;
+  handleClick: (actionType: ActionType) => Promise<void>;
 }
 
 interface ActionListProps {
@@ -72,7 +72,7 @@ const ActionInfos: Readonly<ActionInfo>[] = [
 function ActionItem({ item, handleClick }: ActionItemProps) {
   const iconSize = item.iconSize ?? 24;
   return (
-    <a href="#" onClick={() => handleClick(item.actionType)}>
+    <a href="#" onClick={() => void handleClick(item.actionType)}>
       <div>
         <img src={item.iconSrc} width={iconSize} height={iconSize} />
       </div>
@@ -92,13 +92,20 @@ function ActionList({ actionInfos }: ActionListProps) {
     isTabLoadingRef.current = true;
     const tab = await getCurrentDefinedTab();
 
+    if (!Actions.checkUrlScheme(tab.url)) {
+      void Actions.notifyError("UNAVAILABLE_SCHEME");
+      isTabLoadingRef.current = false;
+      windowClose();
+      return;
+    }
+
     switch (actionType) {
       case "TWEET": {
         await Actions.createTweetWindow(tab);
         break;
       }
       case "BSKY": {
-        await Actions.createBskyWindow(tab);
+        await Actions.createBskyTab(tab);
         break;
       }
       case "FACEBOOK": {
@@ -106,11 +113,11 @@ function ActionList({ actionInfos }: ActionListProps) {
         break;
       }
       case "HATENA": {
-        await Actions.createHatenaWindow(tab);
+        await Actions.createHatenaTab(tab);
         break;
       }
       case "NOTE": {
-        await Actions.createNoteWindow(tab);
+        await Actions.createNoteTab(tab);
         break;
       }
       case "COPY_NO_PARAM_URL": {
@@ -127,8 +134,8 @@ function ActionList({ actionInfos }: ActionListProps) {
         throw new Error(actionType satisfies never);
       }
     }
-    isTabLoadingRef.current = false;
 
+    isTabLoadingRef.current = false;
     windowClose();
   }
 
@@ -161,8 +168,13 @@ async function getCurrentDefinedTab() {
       active: true,
       currentWindow: true,
     })
-    .catch((err) => {
-      throw err;
+    .catch((err: unknown) => {
+      void Actions.notifyError("UNAVAILABLE_TAB");
+      if (err instanceof Error) {
+        throw new Error(err.message);
+      } else {
+        throw new Error(String(err));
+      }
     });
 
   /* @__PURE__ */

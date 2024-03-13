@@ -1,0 +1,2 @@
+type ErrorType = "UNAVAILABLE_SCHEME" | "UNAVAILABLE_TAB" | "COPY_FAILED";
+

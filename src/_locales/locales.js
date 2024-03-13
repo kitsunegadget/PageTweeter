@@ -47,11 +47,11 @@ export const i18nMessages = {
     ja: "SNS共有",
   },
 
-  error_0: {
+  error_unavailable: {
     en: "Unavailable on this page",
     ja: "このページでは利用できません",
   },
-  error_1: {
+  error_copy_failed: {
     en: "Copy failed",
     ja: "コピーに失敗しました",
   },

@@ -54,21 +54,21 @@ chrome.runtime.onInstalled.addListener(() => {
 
   // declarativeContent
   chrome.declarativeContent.onPageChanged.removeRules(undefined, () => {
-    chrome.action.disable();
+    void chrome.action.disable().then(() => {
+      const rule = {
+        conditions: [
+          new chrome.declarativeContent.PageStateMatcher({
+            pageUrl: {
+              schemes: ["http", "https"],
+            },
+          }),
+        ],
+        actions: [new chrome.declarativeContent.ShowAction()],
+      };
 
-    const rule = {
-      conditions: [
-        new chrome.declarativeContent.PageStateMatcher({
-          pageUrl: {
-            schemes: ["http", "https"],
-          },
-        }),
-      ],
-      actions: [new chrome.declarativeContent.ShowAction()],
-    };
-
-    const rules = [rule];
-    chrome.declarativeContent.onPageChanged.addRules(rules);
+      const rules = [rule];
+      chrome.declarativeContent.onPageChanged.addRules(rules);
+    });
   });
 });
 
@@ -83,48 +83,53 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
       title: tab.title ?? "",
     };
 
+    if (!Actions.checkUrlScheme(definedTab.url)) {
+      void Actions.notifyError("UNAVAILABLE_SCHEME");
+      return;
+    }
+
     const menuItemId = info.menuItemId as ActionType;
     switch (menuItemId) {
       case "TWEET":
-        Actions.createTweetWindow(definedTab);
+        void Actions.createTweetWindow(definedTab);
         break;
 
       case "BSKY":
-        Actions.createBskyWindow(definedTab);
+        void Actions.createBskyTab(definedTab);
         break;
 
       case "FACEBOOK":
-        Actions.createFacebookWindow(definedTab);
+        void Actions.createFacebookWindow(definedTab);
         break;
 
       case "HATENA":
-        Actions.createHatenaWindow(definedTab);
+        void Actions.createHatenaTab(definedTab);
         break;
 
       case "NOTE":
-        Actions.createNoteWindow(definedTab);
+        void Actions.createNoteTab(definedTab);
         break;
 
       case "COPY":
-        Actions.copy(definedTab, "COPY");
+        void Actions.copy(definedTab, "COPY");
         break;
 
       case "COPY_MD_FORMAT":
-        Actions.copy(definedTab, "COPY_MD_FORMAT");
+        void Actions.copy(definedTab, "COPY_MD_FORMAT");
         break;
 
       case "COPY_ONLY_TITLE":
-        Actions.copy(definedTab, "COPY_ONLY_TITLE");
+        void Actions.copy(definedTab, "COPY_ONLY_TITLE");
         break;
 
       case "COPY_NO_PARAM_URL":
-        Actions.copy(definedTab, "COPY_NO_PARAM_URL", true);
+        void Actions.copy(definedTab, "COPY_NO_PARAM_URL", true);
         break;
 
       default:
         throw new Error(menuItemId satisfies never);
     }
   } else {
-    Actions.notifyError(0);
+    void Actions.notifyError("UNAVAILABLE_TAB");
   }
 });
