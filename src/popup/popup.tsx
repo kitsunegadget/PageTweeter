@@ -1,7 +1,8 @@
 import "./popup.css";
 import React, { useRef } from "react";
 import { createRoot } from "react-dom/client";
-import { Actions } from "../shared/actions";
+import { notifyError } from "../shared/notifications";
+import { runActions } from "../shared/runActions";
 
 type ActionInfo = {
   actionType: ActionType;
@@ -90,52 +91,28 @@ function ActionList({ actionInfos }: ActionListProps) {
     }
 
     isTabLoadingRef.current = true;
-    const tab = await getCurrentDefinedTab();
 
-    if (!Actions.checkUrlScheme(tab.url)) {
-      void Actions.notifyError("UNAVAILABLE_SCHEME");
+    let tab;
+    try {
+      tab = await getCurrentDefinedTab();
+    } catch (err: unknown) {
+      await notifyError("UNAVAILABLE_TAB");
       isTabLoadingRef.current = false;
-      windowClose();
+
+      console.error(err);
       return;
     }
 
-    switch (actionType) {
-      case "TWEET": {
-        await Actions.createTweetWindow(tab);
-        break;
-      }
-      case "BSKY": {
-        await Actions.createBskyTab(tab);
-        break;
-      }
-      case "FACEBOOK": {
-        await Actions.createFacebookWindow(tab);
-        break;
-      }
-      case "HATENA": {
-        await Actions.createHatenaTab(tab);
-        break;
-      }
-      case "NOTE": {
-        await Actions.createNoteTab(tab);
-        break;
-      }
-      case "COPY_NO_PARAM_URL": {
-        await Actions.copy(tab, actionType, true);
-        break;
-      }
-      case "COPY":
-      case "COPY_MD_FORMAT":
-      case "COPY_ONLY_TITLE": {
-        await Actions.copy(tab, actionType);
-        break;
-      }
-      default: {
-        throw new Error(actionType satisfies never);
-      }
+    try {
+      await runActions(tab, actionType);
+    } catch (err: unknown) {
+      isTabLoadingRef.current = false;
+
+      console.error(err);
+      return;
     }
 
-    isTabLoadingRef.current = false;
+    // isTabLoadingRef.current = false;
     windowClose();
   }
 
@@ -162,29 +139,24 @@ root.render(
  * Get a current tab as DefinedTab.
  * @returns A DefinedTab
  */
-async function getCurrentDefinedTab() {
-  const [tab] = await chrome.tabs
-    .query({
-      active: true,
-      currentWindow: true,
-    })
-    .catch((err: unknown) => {
-      void Actions.notifyError("UNAVAILABLE_TAB");
-      if (err instanceof Error) {
-        throw new Error(err.message);
-      } else {
-        throw new Error(String(err));
-      }
-    });
+async function getCurrentDefinedTab(): Promise<DefinedTab> {
+  const [tab] = await chrome.tabs.query({
+    active: true,
+    currentWindow: true,
+  });
 
   /* @__PURE__ */
   console.log(tab);
 
+  if (tab.id == null) {
+    throw new Error("the tab id was not found");
+  }
+
   const definedTab: DefinedTab = {
     ...tab,
-    id: tab.id ?? 0,
-    url: tab.url ?? "",
+    id: tab.id,
     title: tab.title ?? "",
+    url: tab.url ?? "",
   };
 
   return definedTab;
